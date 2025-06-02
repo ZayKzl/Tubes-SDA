@@ -16,7 +16,7 @@ PaperNode* buatPaperNode(JurnalData data_jurnal);
 // Menyisipkan paper ke list yang diurutkan berdasarkan TAHUN (menurun: terbaru dulu).
 // Menerima head dari list yang ada dan data jurnal baru.
 // Mengembalikan head baru dari list tersebut.
-PaperNode* sisipkanPaperUrutTahun(PaperNode* head, JurnalData data_jurnal);
+void sisipkanPaperUrutTahunDLL(PaperNode** head_ptr, PaperNode** tail_ptr, JurnalData data_jurnal);
 
 // Menyisipkan paper ke list yang diurutkan berdasarkan JUMLAH INCITATIONS (menurun: terbanyak dulu).
 // Menerima head dari list yang ada dan data jurnal baru.
@@ -35,8 +35,7 @@ void tampilkanListPaper(PaperNode* head);
 // --- Fungsi untuk Menghapus (Dealokasi Memori) Linked List Paper ---
 // Menerima head dari list dan membebaskan memori semua node di dalamnya.
 void hapusListPaper(PaperNode* head);
-
-PaperNode* sisipkanPaperUrutTahunAsc(PaperNode* head, JurnalData data_jurnal);
+void tampilkanListPaperReverse(PaperNode* tail);
 
 // Menyisipkan paper ke list yang diurutkan berdasarkan NAMA PENULIS (abjad A-Z).
 // Menerima head dari list yang ada dan data jurnal baru.

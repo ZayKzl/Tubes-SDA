@@ -24,24 +24,29 @@ typedef struct {
 // --- Struktur Node untuk Linked List Paper ---
 // Node ini akan menyimpan JurnalData dan pointer ke node berikutnya.
 // Kita akan menggunakan ini untuk ketiga jenis linked list (urut tahun, incitations, abjad).
+// --- Struktur Node untuk Linked List Paper (DIUBAH MENJADI DOUBLY) ---
 typedef struct PaperNode {
     JurnalData data;
     struct PaperNode* next;
-    // Jika menggunakan Double Linked List (DLL), tambahkan:
-    // struct PaperNode* prev; 
+    struct PaperNode* prev; // <-- TAMBAHKAN POINTER PREV
 } PaperNode;
 
-// --- Struktur Node untuk BST Field of Study ---
+// --- Struktur Node untuk BST Field of Study (DIUBAH) ---
 typedef struct BSTNodeField {
     char field_of_study[MAX_FIELD_STUDY];
-    PaperNode* list_by_year_head;       // Pointer 1: Head list urut tahun
-    PaperNode* list_by_incitations_head; // Pointer 2: Head list urut incitations
-    PaperNode* list_by_title_head;      // Pointer 3: Head list urut abjad judul
-    PaperNode* list_by_year_asc_head;   
-    PaperNode* list_by_author_head;     // Pointer 4: Head list urut abjad penulis
+
+    // Mengganti list SLL terpisah untuk tahun dengan satu DLL
+    PaperNode* year_list_head; // Pointer ke paper terlama (awal list)
+    PaperNode* year_list_tail; // Pointer ke paper terbaru (akhir list)
+
+    // List lain bisa tetap SLL jika tidak butuh traversal dua arah
+    PaperNode* list_by_incitations_head;
+    PaperNode* list_by_title_head;
+    PaperNode* list_by_author_head;
 
     struct BSTNodeField* left_child;
     struct BSTNodeField* right_child;
 } BSTNodeField;
+
 
 #endif // STRUCTS_H

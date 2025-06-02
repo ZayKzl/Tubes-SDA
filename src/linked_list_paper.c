@@ -6,12 +6,14 @@
 // --- Fungsi untuk Membuat Node Paper Baru ---
 PaperNode* buatPaperNode(JurnalData data_jurnal) {
     PaperNode* node_baru = (PaperNode*)malloc(sizeof(PaperNode));
-    if (node_baru == NULL) {
+    if (node_baru == NULL) 
+    {
         perror("Gagal alokasi memori untuk PaperNode baru");
         return NULL;
     }
     node_baru->data = data_jurnal; // Salin data jurnal
     node_baru->next = NULL;
+    node_baru->prev = NULL;
     // Jika menggunakan DLL, inisialisasi: node_baru->prev = NULL;
     return node_baru;
 }
@@ -19,34 +21,44 @@ PaperNode* buatPaperNode(JurnalData data_jurnal) {
 // --- Implementasi Fungsi Sisip Terurut ---
 
 // Menyisipkan paper ke list yang diurutkan berdasarkan TAHUN (menurun: terbaru dulu)
-PaperNode* sisipkanPaperUrutTahun(PaperNode* head, JurnalData data_jurnal) {
+void sisipkanPaperUrutTahunDLL(PaperNode** head_ptr, PaperNode** tail_ptr, JurnalData data_jurnal) {
     PaperNode* node_baru = buatPaperNode(data_jurnal);
-    if (node_baru == NULL) {
-        return head; // Gagal membuat node, kembalikan head asli
+    if (node_baru == NULL) return; // Gagal buat node
+
+    // Kasus 1: List masih kosong
+    if (*head_ptr == NULL) {
+        *head_ptr = node_baru;
+        *tail_ptr = node_baru;
+        return;
     }
 
-    // Kasus 1: List kosong atau node baru harus jadi head (tahun lebih baru)
-    if (head == NULL || node_baru->data.tahun_terbit > head->data.tahun_terbit) {
-        node_baru->next = head;
-        // Jika DLL: if (head != NULL) head->prev = node_baru;
-        return node_baru; // Head baru adalah node_baru
+    // Kasus 2: Sisipkan di awal (tahun node baru lebih lama dari head)
+    if (node_baru->data.tahun_terbit < (*head_ptr)->data.tahun_terbit) {
+        node_baru->next = *head_ptr;
+        (*head_ptr)->prev = node_baru;
+        *head_ptr = node_baru;
+        return;
     }
 
-    // Kasus 2: Cari posisi yang tepat untuk menyisipkan
-    PaperNode* current = head;
-    while (current->next != NULL && current->next->data.tahun_terbit >= node_baru->data.tahun_terbit) {
+    // Kasus 3: Cari posisi yang tepat dari head
+    PaperNode* current = *head_ptr;
+    while (current->next != NULL && current->next->data.tahun_terbit <= node_baru->data.tahun_terbit) {
         current = current->next;
     }
 
-    node_baru->next = current->next;
-    // Jika DLL:
-    // if (current->next != NULL) {
-    //     current->next->prev = node_baru;
-    // }
-    current->next = node_baru;
-    // node_baru->prev = current;
-    
-    return head;
+    // Kasus 3a: Sisipkan di akhir list
+    if (current->next == NULL) {
+        current->next = node_baru;
+        node_baru->prev = current;
+        *tail_ptr = node_baru; // Update tail
+    }
+    // Kasus 3b: Sisipkan di tengah
+    else {
+        node_baru->next = current->next;
+        node_baru->prev = current;
+        current->next->prev = node_baru;
+        current->next = node_baru;
+    }
 }
 
 // Menyisipkan paper ke list yang diurutkan berdasarkan JUMLAH INCITATIONS (menurun: terbanyak dulu)
@@ -113,6 +125,24 @@ void tampilkanListPaper(PaperNode* head) {
         // Tampilkan field lain jika perlu
         printf("      --------------------------------------------------\n");
         current = current->next;
+        i++;
+    }
+}
+
+void tampilkanListPaperReverse(PaperNode* tail) {
+    if (tail == NULL) {
+        printf("   (List paper kosong)\n");
+        return;
+    }
+    PaperNode* current = tail;
+    int i = 1;
+    while (current != NULL) {
+        printf("   %d. Judul    : %s\n", i, current->data.judul);
+        printf("      Tahun    : %d\n", current->data.tahun_terbit);
+        printf("      Penulis  : %s\n", current->data.nama_penulis);
+        printf("      InCitations: %d\n", current->data.jumlah_incitations);
+        printf("      --------------------------------------------------\n");
+        current = current->prev; // <-- Bergerak mundur
         i++;
     }
 }

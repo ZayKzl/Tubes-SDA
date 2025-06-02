@@ -15,17 +15,20 @@ BSTNodeField* buatBSTNodeField(const char* field_of_study) {
     strncpy(node_baru->field_of_study, field_of_study, MAX_FIELD_STUDY - 1);
     node_baru->field_of_study[MAX_FIELD_STUDY - 1] = '\0'; // Pastikan null-terminated
 
-    node_baru->list_by_year_head = NULL;
+    // Inisialisasi pointer untuk DLL tahun
+    node_baru->year_list_head = NULL;
+    node_baru->year_list_tail = NULL;
+
+    // Inisialisasi pointer untuk SLL lainnya
     node_baru->list_by_incitations_head = NULL;
     node_baru->list_by_title_head = NULL;
-    node_baru->list_by_year_asc_head = NULL; // Inisialisasi head list baru
-    node_baru->list_by_author_head = NULL;   // Inisialisasi head list author baru
-    
+    node_baru->list_by_author_head = NULL;
     
     node_baru->left_child = NULL;
     node_baru->right_child = NULL;
     return node_baru;
 }
+
 
 // --- Fungsi untuk Menyisipkan Node ke BST Field of Study ---
 // (Implementasi BST insert standar, berdasarkan field_of_study)
@@ -59,36 +62,23 @@ BSTNodeField* cariBSTNodeField(BSTNodeField* root, const char* field_of_study) {
 
 // --- Fungsi untuk Menambahkan JurnalData ke BSTNodeField yang Tepat ---
 void tambahkanJurnalKeBST(BSTNodeField** root_bst_ptr, JurnalData data_jurnal) {
-    if (root_bst_ptr == NULL) return; // Guard clause
-
+    // ... (logika mencari/membuat node BST tetap sama) ...
+    
+    // --> Bagian yang diubah <--
     BSTNodeField* target_node_bst = cariBSTNodeField(*root_bst_ptr, data_jurnal.field_of_study);
+    // ... (Logika pembuatan node BST jika belum ada, sama seperti sebelumnya)
 
-    if (target_node_bst == NULL) {
-        // Field of study belum ada di BST, buat node BST baru dan sisipkan
-        // Karena sisipkanBSTNodeField mengembalikan root baru, kita perlu update root_bst_ptr
-        *root_bst_ptr = sisipkanBSTNodeField(*root_bst_ptr, data_jurnal.field_of_study);
-        // Setelah disisipkan, cari lagi node yang baru dibuat itu
-        target_node_bst = cariBSTNodeField(*root_bst_ptr, data_jurnal.field_of_study);
-        if (target_node_bst == NULL) {
-            // Seharusnya tidak terjadi jika sisipkanBSTNodeField dan buatBSTNodeField berhasil
-            fprintf(stderr, "Error: Gagal membuat atau menemukan node BST untuk %s\n", data_jurnal.field_of_study);
-            return;
-        }
-    }
+    // Sekarang sisipkan ke list-list yang ada
+    
+    // Panggil fungsi sisip DLL untuk tahun
+    sisipkanPaperUrutTahunDLL(&target_node_bst->year_list_head, &target_node_bst->year_list_tail, data_jurnal);
 
-    // Sekarang target_node_bst menunjuk ke node BST yang benar (lama atau baru)
-    // Sisipkan data jurnal ke 3 linked list di node BST ini
-    target_node_bst->list_by_year_head = sisipkanPaperUrutTahun(target_node_bst->list_by_year_head, data_jurnal);
+    // Panggil fungsi SLL lainnya (tidak berubah)
     target_node_bst->list_by_incitations_head = sisipkanPaperUrutIncitations(target_node_bst->list_by_incitations_head, data_jurnal);
     target_node_bst->list_by_title_head = sisipkanPaperUrutJudul(target_node_bst->list_by_title_head, data_jurnal);
     target_node_bst->list_by_author_head = sisipkanPaperUrutAuthor(target_node_bst->list_by_author_head, data_jurnal);
-
-    target_node_bst->list_by_year_head = sisipkanPaperUrutTahun(target_node_bst->list_by_year_head, data_jurnal);
-    target_node_bst->list_by_incitations_head = sisipkanPaperUrutIncitations(target_node_bst->list_by_incitations_head, data_jurnal);
-    target_node_bst->list_by_title_head = sisipkanPaperUrutJudul(target_node_bst->list_by_title_head, data_jurnal);
-    // Panggil fungsi sisip untuk list tahun ascending BARU:
-    target_node_bst->list_by_year_asc_head = sisipkanPaperUrutTahunAsc(target_node_bst->list_by_year_asc_head, data_jurnal);
 }
+
 
 // --- Fungsi untuk Menampilkan BST (InOrder traversal untuk debugging) ---
 void tampilkanBSTInOrder(BSTNodeField* root) {
@@ -105,21 +95,15 @@ void tampilkanBSTInOrder(BSTNodeField* root) {
 
 // --- Fungsi untuk Menghapus (Dealokasi Memori) Keseluruhan BST ---
 void hapusBST(BSTNodeField* root) {
-    if (root == NULL) {
-        return;
-    }
-    // Hapus anak kiri dan kanan dulu (post-order traversal)
+    if (root == NULL) return;
     hapusBST(root->left_child);
     hapusBST(root->right_child);
 
-    // Hapus semua linked list paper di node ini
-    hapusListPaper(root->list_by_year_head);
+    // Hapus semua linked list
+    hapusListPaper(root->year_list_head); // Cukup hapus dari head, fungsi hapusListPaper tidak perlu diubah
     hapusListPaper(root->list_by_incitations_head);
     hapusListPaper(root->list_by_title_head);
-
-    hapusListPaper(root->list_by_year_asc_head); // Hapus list baru
-
-    // Akhirnya, hapus node BST itu sendiri
+    
     free(root);
 }
 

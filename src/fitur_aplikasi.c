@@ -91,6 +91,24 @@ void tampilkanListPaperFilteredByAuthorPrefix(PaperNode* head, const char* prefi
     }
 }
 
+// Fungsi helper baru untuk memilih jurnal dari list yang ditampilkan terbalik
+// Fungsi ini harus ditambahkan ke fitur_aplikasi.c atau linked_list_paper.c
+PaperNode* pilihJurnalDariListReverse(PaperNode* tail, int nomor_pilihan) {
+    if (nomor_pilihan <= 0) return NULL;
+    PaperNode* current = tail;
+    int i = 1;
+    while (current != NULL) {
+        if (i == nomor_pilihan) {
+            return current;
+        }
+        current = current->prev; // Traversal mundur
+        i++;
+    }
+    return NULL; // Pilihan tidak valid
+}
+
+
+// --- FUNGSI KELOLA OPSI URUTAN YANG SUDAH DIREVISI ---
 void kelolaOpsiUrutan(BSTNodeField* node_bst_field) {
     if (node_bst_field == NULL) {
         printf("Data field of study tidak ditemukan.\n");
@@ -98,17 +116,59 @@ void kelolaOpsiUrutan(BSTNodeField* node_bst_field) {
         return;
     }
 
-    int pilihan_urut;
-    PaperNode* selected_list_head = node_bst_field->list_by_year_head; // Default
-    const char* urutan_aktif = "Tahun Terbit (Terbaru Dulu)";
+    int pilihan_menu;
+    
+    // Gunakan enum atau int untuk melacak mode urutan saat ini.
+    // 1=Tahun Terbaru, 2=Tahun Terlama, 3=Popularitas, 4=Judul, 6=Penulis
+    int mode_urutan_aktif = 1; // Default: Tahun Terbaru Dulu
+
+    // Pointer ke list SLL yang aktif (untuk non-tahun)
+    PaperNode* active_sll_head = NULL; 
 
     do {
         bersihkanLayar();
         printf("=========================================\n");
         printf("   Hasil Pencarian untuk: %s\n", node_bst_field->field_of_study);
-        printf("   Urutan Saat Ini: %s\n", urutan_aktif);
-        printf("-----------------------------------------\n");
-        tampilkanListPaper(selected_list_head);
+        
+        // Tentukan string urutan aktif dan tampilkan list yang sesuai
+        const char* urutan_aktif_str;
+        switch (mode_urutan_aktif) {
+            case 1:
+                urutan_aktif_str = "Tahun Terbit (Terbaru Dulu)";
+                printf("   Urutan Saat Ini: %s\n", urutan_aktif_str);
+                printf("-----------------------------------------\n");
+                tampilkanListPaperReverse(node_bst_field->year_list_tail);
+                break;
+            case 2:
+                urutan_aktif_str = "Tahun Terbit (Terlama Dulu)";
+                printf("   Urutan Saat Ini: %s\n", urutan_aktif_str);
+                printf("-----------------------------------------\n");
+                tampilkanListPaper(node_bst_field->year_list_head);
+                break;
+            case 3:
+                urutan_aktif_str = "Popularitas (InCitations Terbanyak)";
+                active_sll_head = node_bst_field->list_by_incitations_head;
+                printf("   Urutan Saat Ini: %s\n", urutan_aktif_str);
+                printf("-----------------------------------------\n");
+                tampilkanListPaper(active_sll_head);
+                break;
+            case 4:
+                urutan_aktif_str = "Judul (A-Z)";
+                active_sll_head = node_bst_field->list_by_title_head;
+                printf("   Urutan Saat Ini: %s\n", urutan_aktif_str);
+                printf("-----------------------------------------\n");
+                tampilkanListPaper(active_sll_head);
+                break;
+            case 6:
+                urutan_aktif_str = "Penulis (A-Z)";
+                active_sll_head = node_bst_field->list_by_author_head;
+                printf("   Urutan Saat Ini: %s\n", urutan_aktif_str);
+                printf("-----------------------------------------\n");
+                // Untuk kasus penulis, kita mungkin ingin menampilkan list penuh setelah filter
+                tampilkanListPaper(active_sll_head);
+                break;
+        }
+
         printf("-----------------------------------------\n");
         printf("Pilihan Aksi:\n");
         printf("1. Urutkan berdasarkan Tahun Terbit (Terbaru Dulu)\n");
@@ -116,59 +176,51 @@ void kelolaOpsiUrutan(BSTNodeField* node_bst_field) {
         printf("3. Urutkan berdasarkan Popularitas (Jumlah InCitations Terbanyak)\n");
         printf("4. Urutkan berdasarkan Judul (A-Z)\n");
         printf("5. Lihat Abstrak Jurnal\n");
-        printf("6. Urutkan berdasarkan Penulis (A-Z)\n");
+        printf("6. Cari berdasarkan Nama Penulis\n");
         printf("0. Kembali ke Menu Utama\n");
         printf("Pilihan Urutan/Aksi: ");
         
-        if (scanf("%d", &pilihan_urut) != 1) {
-            pilihan_urut = -1; // Input tidak valid
+        if (scanf("%d", &pilihan_menu) != 1) {
+            pilihan_menu = -1;
             int c;
-            while ((c = getchar()) != '\n' && c != EOF); // Bersihkan buffer
+            while ((c = getchar()) != '\n' && c != EOF);
         }
 
-        switch (pilihan_urut) {
-            case 1:
-                selected_list_head = node_bst_field->list_by_year_head;
-                urutan_aktif = "Tahun Terbit (Terbaru Dulu)";
-                break;
-            case 2:
-                selected_list_head = node_bst_field->list_by_year_asc_head;
-                urutan_aktif = "Tahun Terbit (Terlama Dulu)";
-                break;
-            case 3:
-                selected_list_head = node_bst_field->list_by_incitations_head;
-                urutan_aktif = "Popularitas (InCitations Terbanyak)";
-                break;
-            case 4:
-                selected_list_head = node_bst_field->list_by_title_head;
-                urutan_aktif = "Judul (A-Z)";
-                break;
-            case 6:
+        switch (pilihan_menu) {
+            case 1: mode_urutan_aktif = 1; break;
+            case 2: mode_urutan_aktif = 2; break;
+            case 3: mode_urutan_aktif = 3; break;
+            case 4: mode_urutan_aktif = 4; break;
+            case 6: // Logika filter penulis (tidak mengubah urutan global)
                 {
                     char prefix[MAX_PENULIS];
                     bersihkanLayar();
-                    printf("Masukkan prefix nama penulis: ");
+                    printf("Masukkan prefix nama penulis untuk difilter: ");
                     int c;
-                    while ((c = getchar()) != '\n' && c != EOF); // Bersihkan buffer
+                    while ((c = getchar()) != '\n' && c != EOF);
                     if (fgets(prefix, MAX_PENULIS, stdin) != NULL) {
-                        prefix[strcspn(prefix, "\n")] = 0; // Hapus newline
+                        prefix[strcspn(prefix, "\n")] = 0;
                         tampilkanListPaperFilteredByAuthorPrefix(node_bst_field->list_by_author_head, prefix);
-                    } else {
-                        printf("Gagal membaca input.\n");
                     }
                     tungguEnter();
-                    urutan_aktif = "Penulis (A-Z)";
-                    selected_list_head = node_bst_field->list_by_author_head;
+                    // Setelah filter, mode urutan tetap sama seperti sebelumnya
                 }
                 break;
             case 5: // Lihat Abstrak
-                if (selected_list_head == NULL) {
-                    printf("Tidak ada jurnal untuk dilihat abstraknya.\n");
-                } else {
+                {
                     printf("Masukkan nomor jurnal yang ingin dilihat abstraknya: ");
                     int no_jurnal;
                     if (scanf("%d", &no_jurnal) == 1) {
-                        PaperNode* jurnal_pilihan = pilihJurnalDariList(selected_list_head, no_jurnal);
+                        PaperNode* jurnal_pilihan = NULL;
+                        // Tentukan cara memilih berdasarkan mode urutan aktif
+                        if (mode_urutan_aktif == 1) { // Terbaru dulu (mundur)
+                            jurnal_pilihan = pilihJurnalDariListReverse(node_bst_field->year_list_tail, no_jurnal);
+                        } else if (mode_urutan_aktif == 2) { // Terlama dulu (maju)
+                            jurnal_pilihan = pilihJurnalDariList(node_bst_field->year_list_head, no_jurnal);
+                        } else { // Urutan SLL lainnya (maju)
+                            jurnal_pilihan = pilihJurnalDariList(active_sll_head, no_jurnal);
+                        }
+
                         if (jurnal_pilihan != NULL) {
                             lihatAbstrakJurnal(jurnal_pilihan->data);
                         } else {
@@ -177,10 +229,10 @@ void kelolaOpsiUrutan(BSTNodeField* node_bst_field) {
                     } else {
                         printf("Input nomor tidak valid.\n");
                         int c;
-                        while ((c = getchar()) != '\n' && c != EOF); // Bersihkan buffer
+                        while ((c = getchar()) != '\n' && c != EOF);
                     }
+                    tungguEnter();
                 }
-                tungguEnter(); // Beri jeda setelah lihat abstrak atau pesan error
                 break;
             case 0:
                 printf("Kembali ke menu utama...\n");
@@ -189,7 +241,7 @@ void kelolaOpsiUrutan(BSTNodeField* node_bst_field) {
                 printf("Pilihan tidak valid!\n");
                 tungguEnter();
         }
-    } while (pilihan_urut != 0);
+    } while (pilihan_menu != 0);
 }
 
 
