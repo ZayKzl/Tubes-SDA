@@ -1,1 +1,46 @@
-
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Build C Project (direct GCC)",
+            "type": "shell",
+            "command": "gcc", // Langsung panggil compiler gcc
+            "args": [
+                // Compiler flags
+                "-Wall",      // Aktifkan semua warning standar
+                "-Wextra",    // Aktifkan warning tambahan
+                "-g",         // Hasilkan informasi debug
+                
+                // Daftarkan SEMUA file .c Anda di sini
+                "fileProgram/main.c",
+                "fileProgram/linked_list_paper.c",
+                "fileProgram/bst_field_study.c",
+                "fileProgram/manajemen_file.c",
+                "fileProgram/fitur_aplikasi.c",
+                "fileProgram/cJSON.c", // Jangan lupa cJSON.c
+                
+                // Output file
+                "-o",
+                "program_jurnal_direct" // Nama program hasil kompilasi
+                
+                // Tambahkan library lain jika perlu, misal -lm untuk math.h
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true // Menjadikan ini task build default
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": false,
+                "clear": false
+            },
+            "problemMatcher": [
+                "$gcc" // Untuk parsing error dan warning dari GCC
+            ]
+        }
+        // Anda bisa menambahkan task lain di sini jika perlu
+    ]
+}
