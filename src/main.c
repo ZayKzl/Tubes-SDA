@@ -5,19 +5,22 @@
 #include "../include/bst_field_study.h"
 #include "../include/fitur_aplikasi.h"
 
-// Fungsi tungguEnter dari fitur_aplikasi.c mungkin perlu dideklarasikan di .h atau dipindah
-// jika Anda tidak ingin #include fitur_aplikasi.h di sini hanya untuk itu.
-// Untuk sementara, kita bisa panggil dari fitur_aplikasi.c nanti.
-// Atau tambahkan deklarasinya di sini jika hanya digunakan di main.c:
-// void tungguEnter(); 
+// Deklarasi eksternal untuk tungguEnter jika belum ada di header
+// Atau pastikan sudah ada di fitur_aplikasi.h
+extern void tungguEnter(); 
+extern void tampilkanMenuUtama();
+extern void jalankanFiturPencarianJurnal(BSTNodeField* root_bst);
+
 
 int main() {
     BSTNodeField* root_bst = NULL;
     // GANTI NAMA FILE KE FILE JSON ANDA
-    const char* nama_master_file = "../dataset/jurnals_output.json"; // atau nama file JSON lain dari Python Anda
+    // Ini sudah benar, menggunakan path relatif dari root proyek
+    const char *master_file_path = "dataset/jurnals_output.json"; 
 
-    printf("Memuat data dari master file JSON: %s...\n", nama_master_file);
-    if (!muatDataDariMasterFile(nama_master_file, &root_bst)) {
+    // PERBAIKAN DI SINI: Gunakan 'master_file_path' sebagai argumen
+    printf("Memuat data dari master file JSON: %s...\n", master_file_path); 
+    if (!muatDataDariMasterFile(master_file_path, &root_bst)) { // PERBAIKAN DI SINI: Gunakan 'master_file_path'
         printf("Gagal memuat data. Aplikasi mungkin tidak berfungsi dengan benar atau akan keluar.\n");
         // Anda bisa memilih untuk keluar jika data gagal dimuat:
         // return EXIT_FAILURE; 
@@ -26,25 +29,21 @@ int main() {
     }
     
     // Panggil tungguEnter() setelah pesan agar pengguna sempat baca
-    // Ini akan memanggil fungsi dari fitur_aplikasi.c, pastikan di-link dengan benar.
-    // Jika tidak mau ada dependensi ke fitur_aplikasi.c di main, buat fungsi tungguEnter lokal.
-    // Untuk sementara kita panggil dari sana.
-    extern void tungguEnter(); // Deklarasi eksternal jika belum ada di header
     tungguEnter();
 
 
     int pilihan_menu;
     do {
-        tampilkanMenuUtama(); // Dari fitur_aplikasi.h/.c
+        tampilkanMenuUtama(); 
         if (scanf("%d", &pilihan_menu) != 1) {
             pilihan_menu = -1; 
             int c_buff;
-            while ((c_buff = getchar()) != '\n' && c_buff != EOF);
+            while ((c_buff = getchar()) != '\n' && c_buff != EOF); // Membersihkan buffer input
         }
 
         switch (pilihan_menu) {
             case 1:
-                jalankanFiturPencarianJurnal(root_bst); // Dari fitur_aplikasi.h/.c
+                jalankanFiturPencarianJurnal(root_bst); 
                 break;
             case 0:
                 printf("Keluar dari aplikasi...\n");
