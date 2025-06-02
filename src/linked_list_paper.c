@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "linked_list_paper.h" // Berisi deklarasi fungsi dan include "structs.h"
+#include "../include/linked_list_paper.h" // Berisi deklarasi fungsi dan include "structs.h"
 
 // --- Fungsi untuk Membuat Node Paper Baru ---
 PaperNode* buatPaperNode(JurnalData data_jurnal) {

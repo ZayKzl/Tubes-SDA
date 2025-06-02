@@ -2,8 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <strings.h>
-#include "bst_field_study.h"   // Berisi deklarasi fungsi dan include "structs.h"
-#include "linked_list_paper.h" // Diperlukan untuk memanggil fungsi list paper
+#include "../include/bst_field_study.h"   // Berisi deklarasi fungsi dan include "structs.h"
+#include "../include/linked_list_paper.h" // Diperlukan untuk memanggil fungsi list paper
 
 // --- Fungsi untuk Membuat Node BST Field of Study Baru ---
 BSTNodeField* buatBSTNodeField(const char* field_of_study) {

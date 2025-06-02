@@ -12,16 +12,16 @@
                 "-g",         // Hasilkan informasi debug
                 
                 // Daftarkan SEMUA file .c Anda di sini
-                "fileProgram/main.c",
-                "fileProgram/linked_list_paper.c",
-                "fileProgram/bst_field_study.c",
-                "fileProgram/manajemen_file.c",
-                "fileProgram/fitur_aplikasi.c",
-                "fileProgram/cJSON.c", // Jangan lupa cJSON.c
+                "src/main.c",
+                "src/linked_list_paper.c",
+                "src/bst_field_study.c",
+                "src/manajemen_file.c",
+                "src/fitur_aplikasi.c",
+                "cJSON/cJSON.c", // Jangan lupa cJSON.c
                 
                 // Output file
                 "-o",
-                "program_jurnal_direct" // Nama program hasil kompilasi
+                "program_jurnal" // Nama program hasil kompilasi
                 
                 // Tambahkan library lain jika perlu, misal -lm untuk math.h
             ],

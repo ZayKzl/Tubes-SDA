@@ -1,9 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "manajemen_file.h"   // Deklarasi fungsi dan include "structs.h"
-#include "bst_field_study.h"  // Untuk memanggil tambahkanJurnalKeBST
-#include "cJSON.h"            // Library untuk parsing JSON
+#include "../include/manajemen_file.h"   // Deklarasi fungsi dan include "structs.h"
+#include "../include/bst_field_study.h"  // Untuk memanggil tambahkanJurnalKeBST
+#include "../cJSON/cJSON.h"            // Library untuk parsing JSON
 
 // --- Fungsi untuk Memuat Data Jurnal dari File JSON ---
 int muatDataDariMasterFile(const char* nama_file_json, BSTNodeField** root_bst_ptr) {

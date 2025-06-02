@@ -1,9 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h> // Untuk EXIT_SUCCESS, EXIT_FAILURE
-#include "structs.h"
-#include "manajemen_file.h"
-#include "bst_field_study.h"
-#include "fitur_aplikasi.h"
+#include "../include/structs.h"
+#include "../include/manajemen_file.h"
+#include "../include/bst_field_study.h"
+#include "../include/fitur_aplikasi.h"
 
 // Fungsi tungguEnter dari fitur_aplikasi.c mungkin perlu dideklarasikan di .h atau dipindah
 // jika Anda tidak ingin #include fitur_aplikasi.h di sini hanya untuk itu.
@@ -14,7 +14,7 @@
 int main() {
     BSTNodeField* root_bst = NULL;
     // GANTI NAMA FILE KE FILE JSON ANDA
-    const char* nama_master_file = "fileProgram/jurnals_output.json"; // atau nama file JSON lain dari Python Anda
+    const char* nama_master_file = "../dataset/jurnals_output.json"; // atau nama file JSON lain dari Python Anda
 
     printf("Memuat data dari master file JSON: %s...\n", nama_master_file);
     if (!muatDataDariMasterFile(nama_master_file, &root_bst)) {

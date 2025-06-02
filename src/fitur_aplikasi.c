@@ -1,9 +1,9 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h> // Untuk system("cls") atau system("clear") jika dipakai
-#include "fitur_aplikasi.h"
-#include "bst_field_study.h"   // Untuk cariBSTNodeField
-#include "linked_list_paper.h" // Untuk tampilkanListPaper
+#include "../include/fitur_aplikasi.h"
+#include "../include/bst_field_study.h"   // Untuk cariBSTNodeField
+#include "../include/linked_list_paper.h" // Untuk tampilkanListPaper
 
 void bersihkanLayar() {
     // Gunakan system("cls") untuk Windows, system("clear") untuk Linux/macOS
