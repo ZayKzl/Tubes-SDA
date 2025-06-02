@@ -38,4 +38,9 @@ void hapusListPaper(PaperNode* head);
 
 PaperNode* sisipkanPaperUrutTahunAsc(PaperNode* head, JurnalData data_jurnal);
 
+// Menyisipkan paper ke list yang diurutkan berdasarkan NAMA PENULIS (abjad A-Z).
+// Menerima head dari list yang ada dan data jurnal baru.
+// Mengembalikan head baru dari list tersebut.
+PaperNode* sisipkanPaperUrutAuthor(PaperNode* head, JurnalData data_jurnal);
+
 #endif // LINKED_LIST_PAPER_H

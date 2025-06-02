@@ -117,6 +117,27 @@ void tampilkanListPaper(PaperNode* head) {
     }
 }
 
+// --- Fungsi untuk Menyisipkan paper ke list yang diurutkan berdasarkan NAMA PENULIS (abjad A-Z, case-insensitive) ---
+PaperNode* sisipkanPaperUrutAuthor(PaperNode* head, JurnalData data_jurnal) {
+    PaperNode* node_baru = buatPaperNode(data_jurnal);
+    if (node_baru == NULL) {
+        return head;
+    }
+
+    if (head == NULL || strcasecmp(node_baru->data.nama_penulis, head->data.nama_penulis) < 0) {
+        node_baru->next = head;
+        return node_baru;
+    }
+
+    PaperNode* current = head;
+    while (current->next != NULL && strcasecmp(node_baru->data.nama_penulis, current->next->data.nama_penulis) >= 0) {
+        current = current->next;
+    }
+    node_baru->next = current->next;
+    current->next = node_baru;
+    return head;
+}
+
 // --- Fungsi untuk Menghapus (Dealokasi Memori) Linked List Paper ---
 void hapusListPaper(PaperNode* head) {
     PaperNode* current = head;

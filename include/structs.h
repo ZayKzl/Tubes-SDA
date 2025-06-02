@@ -38,6 +38,7 @@ typedef struct BSTNodeField {
     PaperNode* list_by_incitations_head; // Pointer 2: Head list urut incitations
     PaperNode* list_by_title_head;      // Pointer 3: Head list urut abjad judul
     PaperNode* list_by_year_asc_head;   
+    PaperNode* list_by_author_head;     // Pointer 4: Head list urut abjad penulis
 
     struct BSTNodeField* left_child;
     struct BSTNodeField* right_child;

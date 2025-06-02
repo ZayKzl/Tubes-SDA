@@ -65,6 +65,32 @@ void lihatAbstrakJurnal(JurnalData data_jurnal) {
     tungguEnter();
 }
 
+void tampilkanListPaperFilteredByAuthorPrefix(PaperNode* head, const char* prefix) {
+    if (head == NULL) {
+        printf("   (List paper kosong)\n");
+        return;
+    }
+    PaperNode* current = head;
+    int i = 1;
+    int prefix_len = strlen(prefix);
+    int found = 0;
+    while (current != NULL) {
+        if (strncasecmp(current->data.nama_penulis, prefix, prefix_len) == 0) {
+            found = 1;
+            printf("   %d. Penulis : %s\n", i, current->data.nama_penulis);
+            printf("      Judul    : %s\n", current->data.judul);
+            printf("      Tahun    : %d\n", current->data.tahun_terbit);
+            printf("      InCitations: %d\n", current->data.jumlah_incitations);
+            printf("      --------------------------------------------------\n");
+            i++;
+        }
+        current = current->next;
+    }
+    if (!found) {
+        printf("   Tidak ditemukan penulis dengan prefix '%s'.\n", prefix);
+    }
+}
+
 void kelolaOpsiUrutan(BSTNodeField* node_bst_field) {
     if (node_bst_field == NULL) {
         printf("Data field of study tidak ditemukan.\n");
@@ -90,6 +116,7 @@ void kelolaOpsiUrutan(BSTNodeField* node_bst_field) {
         printf("3. Urutkan berdasarkan Popularitas (Jumlah InCitations Terbanyak)\n");
         printf("4. Urutkan berdasarkan Judul (A-Z)\n");
         printf("5. Lihat Abstrak Jurnal\n");
+        printf("6. Urutkan berdasarkan Penulis (A-Z)\n");
         printf("0. Kembali ke Menu Utama\n");
         printf("Pilihan Urutan/Aksi: ");
         
@@ -98,7 +125,6 @@ void kelolaOpsiUrutan(BSTNodeField* node_bst_field) {
             int c;
             while ((c = getchar()) != '\n' && c != EOF); // Bersihkan buffer
         }
-
 
         switch (pilihan_urut) {
             case 1:
@@ -116,6 +142,24 @@ void kelolaOpsiUrutan(BSTNodeField* node_bst_field) {
             case 4:
                 selected_list_head = node_bst_field->list_by_title_head;
                 urutan_aktif = "Judul (A-Z)";
+                break;
+            case 6:
+                {
+                    char prefix[MAX_PENULIS];
+                    bersihkanLayar();
+                    printf("Masukkan prefix nama penulis: ");
+                    int c;
+                    while ((c = getchar()) != '\n' && c != EOF); // Bersihkan buffer
+                    if (fgets(prefix, MAX_PENULIS, stdin) != NULL) {
+                        prefix[strcspn(prefix, "\n")] = 0; // Hapus newline
+                        tampilkanListPaperFilteredByAuthorPrefix(node_bst_field->list_by_author_head, prefix);
+                    } else {
+                        printf("Gagal membaca input.\n");
+                    }
+                    tungguEnter();
+                    urutan_aktif = "Penulis (A-Z)";
+                    selected_list_head = node_bst_field->list_by_author_head;
+                }
                 break;
             case 5: // Lihat Abstrak
                 if (selected_list_head == NULL) {

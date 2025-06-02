@@ -19,6 +19,8 @@ BSTNodeField* buatBSTNodeField(const char* field_of_study) {
     node_baru->list_by_incitations_head = NULL;
     node_baru->list_by_title_head = NULL;
     node_baru->list_by_year_asc_head = NULL; // Inisialisasi head list baru
+    node_baru->list_by_author_head = NULL;   // Inisialisasi head list author baru
+    
     
     node_baru->left_child = NULL;
     node_baru->right_child = NULL;
@@ -79,6 +81,7 @@ void tambahkanJurnalKeBST(BSTNodeField** root_bst_ptr, JurnalData data_jurnal) {
     target_node_bst->list_by_year_head = sisipkanPaperUrutTahun(target_node_bst->list_by_year_head, data_jurnal);
     target_node_bst->list_by_incitations_head = sisipkanPaperUrutIncitations(target_node_bst->list_by_incitations_head, data_jurnal);
     target_node_bst->list_by_title_head = sisipkanPaperUrutJudul(target_node_bst->list_by_title_head, data_jurnal);
+    target_node_bst->list_by_author_head = sisipkanPaperUrutAuthor(target_node_bst->list_by_author_head, data_jurnal);
 
     target_node_bst->list_by_year_head = sisipkanPaperUrutTahun(target_node_bst->list_by_year_head, data_jurnal);
     target_node_bst->list_by_incitations_head = sisipkanPaperUrutIncitations(target_node_bst->list_by_incitations_head, data_jurnal);
