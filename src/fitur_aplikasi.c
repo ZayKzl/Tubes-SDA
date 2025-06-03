@@ -41,25 +41,26 @@ void tampilkanSemuaFieldOfStudy(BSTNodeField* root) {
         return;
     }
 
-    printf("\n=== Daftar Field of Study ===\n");
-    tampilkanBSTInOrder(root); // Misalnya in-order traversal
+    printf("=========================================\n");
+    printf("       DAFTAR FIELD OF STUDY\n");
+    printf("=========================================\n");
+    tampilkanBSTInOrder(root);
 }
 
 
 void lihatAbstrakJurnal(JurnalData data_jurnal) {
     bersihkanLayar();
     printf("=========================================\n");
-    printf("             DETAIL & ABSTRAK JURNAL\n");
+    printf("        DETAIL & ABSTRAK JURNAL\n");
     printf("=========================================\n");
-    printf("ID Paper     : %s\n", data_jurnal.id_paper);
-    printf("Judul        : %s\n", data_jurnal.judul);
-    printf("Penulis      : %s\n", data_jurnal.nama_penulis);
-    printf("Tahun Terbit : %d\n", data_jurnal.tahun_terbit);
-    printf("Field of Study: %s\n", data_jurnal.field_of_study);
-    printf("InCitations  : %d\n", data_jurnal.jumlah_incitations);
-    printf("Sitasi Info  : %s\n", data_jurnal.sitasi_info);
+    printf("ID Paper       : %s\n", data_jurnal.id_paper);
+    printf("Judul          : %s\n", data_jurnal.judul);
+    printf("Penulis        : %s\n", data_jurnal.nama_penulis);
+    printf("Tahun Terbit   : %d\n", data_jurnal.tahun_terbit);
+    printf("Field of Study : %s\n", data_jurnal.field_of_study);
+    printf("InCitations    : %d\n", data_jurnal.jumlah_incitations);
     printf("-----------------------------------------\n");
-    printf("Abstrak      :\n%s\n", data_jurnal.abstrak);
+    printf("Abstrak        :\n%s\n", data_jurnal.abstrak);
     printf("=========================================\n");
 }
 
@@ -127,13 +128,14 @@ void kelolaOpsiUrutan(BSTNodeField* node_bst_field) {
         
         int total_halaman = (total_item_di_list_aktif > 0) ? (total_item_di_list_aktif + ITEM_PER_HALAMAN - 1) / ITEM_PER_HALAMAN : 1;
 
-        printf("   Urutan Saat Ini: %s (Halaman %d / %d dari total %d jurnal)\n", urutan_aktif_str, halaman_sekarang, total_halaman, total_item_di_list_aktif);
-        printf("-----------------------------------------\n");
+        printf("        Urutan Saat Ini: %s \n", urutan_aktif_str);
+        printf("        Halaman %d / %d dari total %d jurnal\n", halaman_sekarang, total_halaman, total_item_di_list_aktif);
+        printf("      --------------------------------------------------\n\n");
 
         printf("Pilihan Aksi:\n");
-        printf("1. Tahun (Terbaru)         2. Tahun (Terlama)\n");
-        printf("3. Popularitas (Terbanyak)  4. Popularitas (Tersedikit)\n");
-        printf("5. Judul (A-Z)              6. Judul (Z-A)\n");
+        printf("1. Tahun (Terbaru)               2. Tahun (Terlama)\n");
+        printf("3. Popularitas (Terbanyak)       4. Popularitas (Tersedikit)\n");
+        printf("5. Judul (A-Z)                   6. Judul (Z-A)\n");
         printf("7. Lihat Abstrak Jurnal\n");
         if (total_item_di_list_aktif > 0) { // Hanya tampilkan navigasi jika ada item
             if (halaman_sekarang < total_halaman) {

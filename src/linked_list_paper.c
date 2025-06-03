@@ -155,10 +155,10 @@ int tampilkanListPaper(PaperNode* head, const char* list_name, int halaman_sekar
     int item_ditampilkan_di_halaman_ini = 0;
     int nomor_tampil_lokal = 1; // Nomor dimulai dari 1 untuk setiap halaman
     while (current != NULL && item_ditampilkan_di_halaman_ini < item_per_halaman) {
-        printf("   %d. Judul    : %s\n", nomor_tampil_lokal, current->data.judul);
-        printf("      Tahun    : %d\n", current->data.tahun_terbit);
-        printf("      Penulis  : %s\n", current->data.nama_penulis);
-        printf("      InCitations: %d\n", current->data.jumlah_incitations);
+        printf("   %d.  Judul      : %s\n", nomor_tampil_lokal, current->data.judul);
+        printf("       Tahun       : %d\n", current->data.tahun_terbit);
+        printf("       Penulis     : %s\n", current->data.nama_penulis);
+        printf("       InCitations : %d\n", current->data.jumlah_incitations);
         printf("      --------------------------------------------------\n");
         current = current->next;
         item_ditampilkan_di_halaman_ini++;
@@ -217,10 +217,10 @@ int tampilkanListPaperReverse(PaperNode* tail, const char* list_name, int halama
     int nomor_tampil_lokal = 1; // Nomor dimulai dari 1 untuk setiap halaman
     
     while (current != NULL && item_ditampilkan_di_halaman_ini < item_per_halaman) {
-        printf("   %d. Judul    : %s\n", nomor_tampil_lokal, current->data.judul);
-        printf("      Tahun    : %d\n", current->data.tahun_terbit);
-        printf("      Penulis  : %s\n", current->data.nama_penulis);
-        printf("      InCitations: %d\n", current->data.jumlah_incitations);
+        printf("   %d.  Judul       : %s\n", nomor_tampil_lokal, current->data.judul);
+        printf("       Tahun       : %d\n", current->data.tahun_terbit);
+        printf("       Penulis     : %s\n", current->data.nama_penulis);
+        printf("       InCitations : %d\n", current->data.jumlah_incitations);
         printf("      --------------------------------------------------\n");
         current = current->prev;
         item_ditampilkan_di_halaman_ini++;
