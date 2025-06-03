@@ -14,7 +14,7 @@
 int main() {
     BSTNodeField* root_bst = NULL;
     // GANTI NAMA FILE KE FILE JSON ANDA
-    const char* nama_master_file = "../dataset/jurnals_output.json"; // atau nama file JSON lain dari Python Anda
+    const char* nama_master_file = "dataset/jurnals_output.json"; // atau nama file JSON lain dari Python Anda
 
     printf("Memuat data dari master file JSON: %s...\n", nama_master_file);
     if (!muatDataDariMasterFile(nama_master_file, &root_bst)) {
