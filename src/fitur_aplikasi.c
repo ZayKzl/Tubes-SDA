@@ -146,7 +146,7 @@ void kelolaOpsiUrutan(BSTNodeField* node_bst_field) {
             }
         }
         printf("0. Kembali ke Menu Utama\n");
-        printf("Pilihan Urutan/Aksi: ");
+        printf("\nPilihan Urutan/Aksi: ");
         
         if (scanf("%d", &pilihan_menu_aksi) != 1) {
             pilihan_menu_aksi = -1; 
