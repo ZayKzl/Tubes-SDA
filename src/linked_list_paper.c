@@ -244,6 +244,8 @@ int tampilkanListPaperReverse(PaperNode* tail, const char* list_name, int halama
     while (current != NULL && item_ditampilkan_di_halaman_ini < item_per_halaman) {
         printf("   %d. Judul    : %s\n", nomor_global_saat_ini, current->data.judul);
         printf("      Tahun    : %d\n", current->data.tahun_terbit);
+        printf("      Penulis  : %s\n", current->data.nama_penulis);
+        printf("      InCitations: %d\n", current->data.jumlah_incitations);
         // ... (print field lain) ...
         printf("      --------------------------------------------------\n");
         current = current->prev;
