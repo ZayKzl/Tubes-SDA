@@ -6,6 +6,9 @@
 // --- Fungsi untuk Menampilkan Menu Utama ---
 void tampilkanMenuUtama();
 
+void tampilkanSemuaFieldOfStudy(BSTNodeField* root);
+
+
 // --- Fungsi untuk Menjalankan Fitur Pencarian Jurnal ---
 // root_bst adalah root dari keseluruhan struktur data.
 // Meminta input field_of_study dari pengguna.

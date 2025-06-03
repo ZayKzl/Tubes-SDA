@@ -80,7 +80,7 @@ void tambahkanJurnalKeBST(BSTNodeField** root_bst_ptr, JurnalData data_jurnal) {
 void tampilkanBSTInOrder(BSTNodeField* root) {
     if (root != NULL) {
         tampilkanBSTInOrder(root->left_child);
-        printf("Field of Study: %s\n", root->field_of_study);
+        printf(" %s\n", root->field_of_study);
         // Tambahkan detail lain jika perlu untuk debugging
         tampilkanBSTInOrder(root->right_child);
     }

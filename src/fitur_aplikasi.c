@@ -10,7 +10,7 @@ void bersihkanLayar() {
     // Atau cetak banyak baris baru jika ingin portabilitas tanpa panggilan sistem
     // system("cls"); 
     // system("clear");
-    printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"); // Cara sederhana
+    printf("\n\n"); // Cara sederhana
 }
 
 void tungguEnter() {
@@ -28,11 +28,23 @@ void tampilkanMenuUtama() {
     printf(" Stakeholder: Civitas Akademika\n");
     printf("-----------------------------------------\n");
     printf("Menu:\n");
-    printf("1. Pencarian Jurnal (berdasarkan Field of Study)\n");
+    printf("1. Tampilkan Field of Study\n");
+    printf("2. Pencarian Jurnal (berdasarkan Field of Study)\n");
     printf("0. Keluar\n");
     printf("-----------------------------------------\n");
     printf("Pilihan Anda: ");
 }
+
+void tampilkanSemuaFieldOfStudy(BSTNodeField* root) {
+    if (root == NULL) {
+        printf("Tidak ada data Field of Study.\n");
+        return;
+    }
+
+    printf("\n=== Daftar Field of Study ===\n");
+    tampilkanBSTInOrder(root); // Misalnya in-order traversal
+}
+
 
 void lihatAbstrakJurnal(JurnalData data_jurnal) {
     bersihkanLayar();
@@ -49,7 +61,6 @@ void lihatAbstrakJurnal(JurnalData data_jurnal) {
     printf("-----------------------------------------\n");
     printf("Abstrak      :\n%s\n", data_jurnal.abstrak);
     printf("=========================================\n");
-    tungguEnter();
 }
 
 void kelolaOpsiUrutan(BSTNodeField* node_bst_field) {

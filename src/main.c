@@ -44,6 +44,9 @@ int main() {
 
         switch (pilihan_menu) {
             case 1:
+                tampilkanSemuaFieldOfStudy(root_bst);
+                break;
+            case 2:
                 jalankanFiturPencarianJurnal(root_bst); // Dari fitur_aplikasi.h/.c
                 break;
             case 0:
