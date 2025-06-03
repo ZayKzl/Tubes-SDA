@@ -68,10 +68,10 @@ void kelolaOpsiUrutan(BSTNodeField* node_bst_field) {
     int halaman_sekarang = 1;
     const int ITEM_PER_HALAMAN = 20;
     int total_item_di_list_aktif = 0;
-    int nomor_urut_pertama_di_halaman = 0;
+    int dummy_nomor_awal; // Untuk parameter fungsi tampilkanList...
 
-    PaperNode* head_list_aktif = NULL; // Pointer ke head dari list yang sedang aktif untuk tampilan maju
-    PaperNode* tail_list_aktif = NULL; // Pointer ke tail dari list yang sedang aktif untuk tampilan mundur
+    PaperNode* head_list_aktif = NULL; 
+    PaperNode* tail_list_aktif = NULL; 
 
     do {
         bersihkanLayar();
@@ -80,63 +80,48 @@ void kelolaOpsiUrutan(BSTNodeField* node_bst_field) {
         
         const char* urutan_aktif_str = "";
         
-        // Set head/tail list aktif berdasarkan mode tampilan
         switch (mode_tampilan_aktif) {
             case 1: 
                 urutan_aktif_str = "Tahun Terbit (Terbaru Dulu)";
                 tail_list_aktif = node_bst_field->year_list_tail;
-                head_list_aktif = NULL; // Tidak digunakan untuk reverse display dari tail
-                total_item_di_list_aktif = tampilkanListPaperReverse(tail_list_aktif, "Tahun (Terbaru)", halaman_sekarang, ITEM_PER_HALAMAN, &nomor_urut_pertama_di_halaman);
+                head_list_aktif = NULL; 
+                total_item_di_list_aktif = tampilkanListPaperReverse(tail_list_aktif, "Tahun (Terbaru)", halaman_sekarang, ITEM_PER_HALAMAN, &dummy_nomor_awal);
                 break;
             case 2: 
                 urutan_aktif_str = "Tahun Terbit (Terlama Dulu)";
                 head_list_aktif = node_bst_field->year_list_head;
                 tail_list_aktif = NULL;
-                total_item_di_list_aktif = tampilkanListPaper(head_list_aktif, "Tahun (Terlama)", halaman_sekarang, ITEM_PER_HALAMAN, &nomor_urut_pertama_di_halaman);
+                total_item_di_list_aktif = tampilkanListPaper(head_list_aktif, "Tahun (Terlama)", halaman_sekarang, ITEM_PER_HALAMAN, &dummy_nomor_awal);
                 break;
             case 3: 
                 urutan_aktif_str = "Popularitas (InCitations Terbanyak)";
                 head_list_aktif = node_bst_field->incitations_list_head;
                 tail_list_aktif = NULL;
-                total_item_di_list_aktif = tampilkanListPaper(head_list_aktif, "Incitations (Terbanyak)", halaman_sekarang, ITEM_PER_HALAMAN, &nomor_urut_pertama_di_halaman);
+                total_item_di_list_aktif = tampilkanListPaper(head_list_aktif, "Incitations (Terbanyak)", halaman_sekarang, ITEM_PER_HALAMAN, &dummy_nomor_awal);
                 break;
             case 4: 
                 urutan_aktif_str = "Popularitas (InCitations Tersedikit)";
                 tail_list_aktif = node_bst_field->incitations_list_tail;
                 head_list_aktif = NULL;
-                total_item_di_list_aktif = tampilkanListPaperReverse(tail_list_aktif, "Incitations (Tersedikit)", halaman_sekarang, ITEM_PER_HALAMAN, &nomor_urut_pertama_di_halaman);
+                total_item_di_list_aktif = tampilkanListPaperReverse(tail_list_aktif, "Incitations (Tersedikit)", halaman_sekarang, ITEM_PER_HALAMAN, &dummy_nomor_awal);
                 break;
             case 5: 
                 urutan_aktif_str = "Judul (A-Z)";
                 head_list_aktif = node_bst_field->title_list_head;
                 tail_list_aktif = NULL;
-                total_item_di_list_aktif = tampilkanListPaper(head_list_aktif, "Judul (A-Z)", halaman_sekarang, ITEM_PER_HALAMAN, &nomor_urut_pertama_di_halaman);
+                total_item_di_list_aktif = tampilkanListPaper(head_list_aktif, "Judul (A-Z)", halaman_sekarang, ITEM_PER_HALAMAN, &dummy_nomor_awal);
                 break;
             case 6: 
                 urutan_aktif_str = "Judul (Z-A)";
                 tail_list_aktif = node_bst_field->title_list_tail;
                 head_list_aktif = NULL;
-                total_item_di_list_aktif = tampilkanListPaperReverse(tail_list_aktif, "Judul (Z-A)", halaman_sekarang, ITEM_PER_HALAMAN, &nomor_urut_pertama_di_halaman);
-                break;
-            default: // Seharusnya tidak pernah terjadi jika mode_tampilan_aktif dikelola dengan baik
-                urutan_aktif_str = "Mode Tidak Diketahui";
-                total_item_di_list_aktif = 0;
+                total_item_di_list_aktif = tampilkanListPaperReverse(tail_list_aktif, "Judul (Z-A)", halaman_sekarang, ITEM_PER_HALAMAN, &dummy_nomor_awal);
                 break;
         }
         
         int total_halaman = (total_item_di_list_aktif > 0) ? (total_item_di_list_aktif + ITEM_PER_HALAMAN - 1) / ITEM_PER_HALAMAN : 1;
 
-        printf("   Urutan Saat Ini: %s (Halaman %d / %d)\n", urutan_aktif_str, halaman_sekarang, total_halaman);
-        if (total_item_di_list_aktif > 0 && nomor_urut_pertama_di_halaman > 0) {
-             int nomor_urut_terakhir_di_halaman = nomor_urut_pertama_di_halaman + ITEM_PER_HALAMAN - 1;
-             if (nomor_urut_terakhir_di_halaman > total_item_di_list_aktif) {
-                 nomor_urut_terakhir_di_halaman = total_item_di_list_aktif;
-             }
-             printf("   (Menampilkan jurnal nomor %d sampai %d dari total %d)\n", 
-                    nomor_urut_pertama_di_halaman, 
-                    nomor_urut_terakhir_di_halaman,
-                    total_item_di_list_aktif);
-        }
+        printf("   Urutan Saat Ini: %s (Halaman %d / %d dari total %d jurnal)\n", urutan_aktif_str, halaman_sekarang, total_halaman, total_item_di_list_aktif);
         printf("-----------------------------------------\n");
 
         printf("Pilihan Aksi:\n");
@@ -144,8 +129,14 @@ void kelolaOpsiUrutan(BSTNodeField* node_bst_field) {
         printf("3. Popularitas (Terbanyak)  4. Popularitas (Tersedikit)\n");
         printf("5. Judul (A-Z)              6. Judul (Z-A)\n");
         printf("7. Lihat Abstrak Jurnal\n");
-        if (halaman_sekarang < total_halaman && total_item_di_list_aktif > 0) printf("8. Halaman Berikutnya (Next)\n");
-        if (halaman_sekarang > 1 && total_item_di_list_aktif > 0)           printf("9. Halaman Sebelumnya (Prev)\n");
+        if (total_item_di_list_aktif > 0) { // Hanya tampilkan navigasi jika ada item
+            if (halaman_sekarang < total_halaman) {
+                printf("8. Halaman Berikutnya (Next)\n");
+            }
+            if (halaman_sekarang > 1) {
+                printf("9. Halaman Sebelumnya (Prev)\n");
+            }
+        }
         printf("0. Kembali ke Menu Utama\n");
         printf("Pilihan Urutan/Aksi: ");
         
@@ -155,7 +146,6 @@ void kelolaOpsiUrutan(BSTNodeField* node_bst_field) {
             while ((c = getchar()) != '\n' && c != EOF); 
         }
 
-        // Kurung kurawal untuk switch(pilihan_menu_aksi) dimulai di sini
         switch (pilihan_menu_aksi) {
             case 1: case 2: case 3: case 4: case 5: case 6:
                 if (mode_tampilan_aktif != pilihan_menu_aksi) {
@@ -164,36 +154,52 @@ void kelolaOpsiUrutan(BSTNodeField* node_bst_field) {
                 }
                 break;
             case 7: // Lihat Abstrak
-                { // Kurung kurawal untuk scope case 7
+                { 
                     if (total_item_di_list_aktif == 0) {
                         printf("Tidak ada jurnal untuk dilihat.\n");
                         tungguEnter();
-                        break; // Keluar dari case 7
+                        break; 
                     }
-
-                    // Variabel dideklarasikan di sini
-                    int no_jurnal_di_halaman_input; 
-                    PaperNode* jurnal_pilihan = NULL;
-
-                    printf("Masukkan nomor jurnal (1-%d) di halaman ini: ", ITEM_PER_HALAMAN);
                     
-                    int c_buf; // Buffer untuk getchar
-                    while ((c_buf = getchar()) != '\n' && c_buf != EOF); // Bersihkan buffer sebelum scanf
+                    printf("Masukkan nomor jurnal (1-%d) yang tampil di halaman ini: ", 
+                           (total_item_di_list_aktif - ((halaman_sekarang - 1) * ITEM_PER_HALAMAN) < ITEM_PER_HALAMAN) ? 
+                           (total_item_di_list_aktif % ITEM_PER_HALAMAN == 0 ? ITEM_PER_HALAMAN : total_item_di_list_aktif % ITEM_PER_HALAMAN) : 
+                           ITEM_PER_HALAMAN);
+                    
+                    int no_jurnal_di_halaman_input; 
+                    
+                    int c_buf; 
+                    while ((c_buf = getchar()) != '\n' && c_buf != EOF); 
 
                     if (scanf("%d", &no_jurnal_di_halaman_input) == 1) {
-                        if (no_jurnal_di_halaman_input < 1 || no_jurnal_di_halaman_input > ITEM_PER_HALAMAN) {
+                        // Validasi input nomor di halaman
+                        int max_item_di_halaman_ini = total_item_di_list_aktif - ((halaman_sekarang - 1) * ITEM_PER_HALAMAN);
+                        if (max_item_di_halaman_ini > ITEM_PER_HALAMAN) max_item_di_halaman_ini = ITEM_PER_HALAMAN;
+
+                        if (no_jurnal_di_halaman_input < 1 || no_jurnal_di_halaman_input > max_item_di_halaman_ini ) {
                              printf("Nomor pilihan di halaman tidak valid.\n");
                         } else {
+                            // Hitung nomor GLOBAL berdasarkan input nomor di halaman
+                            int nomor_pilihan_global;
                             if (mode_tampilan_aktif == 1 || mode_tampilan_aktif == 4 || mode_tampilan_aktif == 6) { // Tampilan mundur
-                                jurnal_pilihan = pilihJurnalDariListReverse(tail_list_aktif, no_jurnal_di_halaman_input, halaman_sekarang, ITEM_PER_HALAMAN);
-                            } else { // Tampilan maju (mode 2, 3, 5)
-                                jurnal_pilihan = pilihJurnalDariList(head_list_aktif, no_jurnal_di_halaman_input, halaman_sekarang, ITEM_PER_HALAMAN);
+                                // Untuk tampilan mundur, item ke-1 di halaman adalah item global terbesar di halaman itu
+                                int item_terakhir_global_di_halaman = total_item_di_list_aktif - ((halaman_sekarang - 1) * ITEM_PER_HALAMAN);
+                                nomor_pilihan_global = item_terakhir_global_di_halaman - no_jurnal_di_halaman_input + 1;
+                            } else { // Tampilan maju
+                                nomor_pilihan_global = ((halaman_sekarang - 1) * ITEM_PER_HALAMAN) + no_jurnal_di_halaman_input;
+                            }
+                            
+                            PaperNode* jurnal_pilihan = NULL;
+                            if (mode_tampilan_aktif == 1 || mode_tampilan_aktif == 4 || mode_tampilan_aktif == 6) { 
+                                jurnal_pilihan = pilihJurnalDariListReverse(tail_list_aktif, nomor_pilihan_global);
+                            } else { 
+                                jurnal_pilihan = pilihJurnalDariList(head_list_aktif, nomor_pilihan_global);
                             }
 
                             if (jurnal_pilihan != NULL) {
                                 lihatAbstrakJurnal(jurnal_pilihan->data);
                             } else {
-                                printf("Nomor jurnal tidak valid untuk halaman atau urutan saat ini.\n");
+                                printf("Nomor jurnal (global %d) tidak ditemukan setelah konversi.\n", nomor_pilihan_global);
                             }
                         }
                     } else {
@@ -202,9 +208,9 @@ void kelolaOpsiUrutan(BSTNodeField* node_bst_field) {
                          while ((c_err = getchar()) != '\n' && c_err != EOF); 
                     }
                     tungguEnter();
-                } // Akhir scope case 7
+                }
                 break; 
-            case 8: // Halaman Berikutnya
+            case 8: 
                 if (halaman_sekarang < total_halaman) {
                     halaman_sekarang++;
                 } else {
@@ -212,7 +218,7 @@ void kelolaOpsiUrutan(BSTNodeField* node_bst_field) {
                     tungguEnter();
                 }
                 break;
-            case 9: // Halaman Sebelumnya
+            case 9: 
                 if (halaman_sekarang > 1) {
                     halaman_sekarang--;
                 } else {
@@ -226,10 +232,9 @@ void kelolaOpsiUrutan(BSTNodeField* node_bst_field) {
             default:
                 printf("Pilihan tidak valid!\n");
                 tungguEnter();
-        } // Akhir switch (pilihan_menu_aksi)
-    } while (pilihan_menu_aksi != 0); // Akhir do-while
+        } 
+    } while (pilihan_menu_aksi != 0); 
 }
-
 
 void jalankanFiturPencarianJurnal(BSTNodeField* root_bst) {
     char input_fos[MAX_FIELD_STUDY];

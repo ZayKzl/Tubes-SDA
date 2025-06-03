@@ -27,8 +27,8 @@ int hitungTotalItemDiList(PaperNode* head);
 
 // Fungsi pilih jurnal sekarang juga butuh info paginasi untuk menghitung indeks absolut
 // nomor_pilihan_di_halaman adalah nomor yang dipilih pengguna (1-20) di halaman saat ini.
-PaperNode* pilihJurnalDariList(PaperNode* head, int nomor_pilihan_di_halaman, int halaman_sekarang, int item_per_halaman);
-PaperNode* pilihJurnalDariListReverse(PaperNode* tail, int nomor_pilihan_di_halaman, int halaman_sekarang, int item_per_halaman); 
+PaperNode* pilihJurnalDariList(PaperNode* head, int nomor_pilihan_global);
+PaperNode* pilihJurnalDariListReverse(PaperNode* tail, int nomor_pilihan_global_dari_depan); 
 
 void hapusListPaper(PaperNode** head_ptr, PaperNode** tail_ptr); // Asumsi Anda punya implementasi yang benar untuk DLL
 

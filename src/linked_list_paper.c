@@ -126,146 +126,123 @@ int hitungTotalItemDiList(PaperNode* head) {
     return count;
 }
 
-// Tampilan MAJU dengan paginasi
-int tampilkanListPaper(PaperNode* head, const char* list_name, int halaman_sekarang, int item_per_halaman, int* nomor_urut_awal_di_halaman_ptr) {
-    if (nomor_urut_awal_di_halaman_ptr != NULL) {
-        *nomor_urut_awal_di_halaman_ptr = 0; // Default jika list kosong atau halaman tidak valid
-    }
+// Tampilan MAJU dengan paginasi (NOMOR LOKAL 1-N PER HALAMAN)
+int tampilkanListPaper(PaperNode* head, const char* list_name, int halaman_sekarang, int item_per_halaman, int* nomor_urut_awal_di_halaman) {
+    // Parameter nomor_urut_awal_di_halaman_ptr_dummy_tidak_dipakai bisa diabaikan atau dihapus jika header juga diubah
     if (head == NULL) {
-        printf("   (List paper %s kosong)\n", list_name);
+        // printf("   (List paper %s kosong)\n", list_name); // Pesan ini bisa dihandle di fitur_aplikasi
         return 0;
     }
 
     int total_item = hitungTotalItemDiList(head);
     if (total_item == 0) {
-        printf("   (List paper %s kosong)\n", list_name);
+        // printf("   (List paper %s kosong)\n", list_name);
         return 0;
     }
 
     int start_index_0based = (halaman_sekarang - 1) * item_per_halaman;
     
     if (start_index_0based >= total_item) {
-        // printf("   (Halaman %d tidak valid untuk list %s. Total item: %d)\n", halaman_sekarang, list_name, total_item);
-        // Tidak perlu print error di sini, biarkan pemanggil yang handle jika total_item_di_halaman_ini 0
-        if (nomor_urut_awal_di_halaman_ptr != NULL) {
-             *nomor_urut_awal_di_halaman_ptr = (total_item > 0 && start_index_0based == 0) ? 1 : 0;
-        }
-        return total_item;
-    }
-
-    if (nomor_urut_awal_di_halaman_ptr != NULL) {
-        *nomor_urut_awal_di_halaman_ptr = start_index_0based + 1;
+        // Tidak ada item untuk halaman ini
+        return total_item; 
     }
 
     PaperNode* current = head;
     int i_skip = 0; 
-    int nomor_tampil_relatif_di_halaman = 1; 
-
     while (current != NULL && i_skip < start_index_0based) {
         current = current->next;
         i_skip++;
     }
 
     int item_ditampilkan_di_halaman_ini = 0;
+    int nomor_tampil_lokal = 1; // Nomor dimulai dari 1 untuk setiap halaman
     while (current != NULL && item_ditampilkan_di_halaman_ini < item_per_halaman) {
-        // Menampilkan nomor urut GLOBAL di sisi kiri
-        printf("   %d. Judul    : %s\n", (start_index_0based + nomor_tampil_relatif_di_halaman), current->data.judul);
+        printf("   %d. Judul    : %s\n", nomor_tampil_lokal, current->data.judul);
         printf("      Tahun    : %d\n", current->data.tahun_terbit);
         printf("      Penulis  : %s\n", current->data.nama_penulis);
         printf("      InCitations: %d\n", current->data.jumlah_incitations);
         printf("      --------------------------------------------------\n");
         current = current->next;
         item_ditampilkan_di_halaman_ini++;
-        nomor_tampil_relatif_di_halaman++;
+        nomor_tampil_lokal++;
     }
     
-    if (item_ditampilkan_di_halaman_ini == 0 && start_index_0based < total_item) {
-         // Ini bisa terjadi jika halaman yang diminta valid tapi tidak ada item lagi (misal halaman terakhir sebagian)
-         // Atau jika memang tidak ada item sama sekali
+    if (item_ditampilkan_di_halaman_ini == 0 && halaman_sekarang > 0 && total_item > 0) {
+         printf("   (Tidak ada item lagi di halaman %d untuk list %s)\n", halaman_sekarang, list_name);
     }
+
+
     return total_item;
 }
 
-// Tampilan MUNDUR dengan paginasi
-int tampilkanListPaperReverse(PaperNode* tail, const char* list_name, int halaman_sekarang, int item_per_halaman, int* nomor_urut_awal_di_halaman_ptr) {
-    if (nomor_urut_awal_di_halaman_ptr != NULL) {
-        *nomor_urut_awal_di_halaman_ptr = 0;
-    }
+// Tampilan MUNDUR dengan paginasi (NOMOR LOKAL 1-N PER HALAMAN)
+int tampilkanListPaperReverse(PaperNode* tail, const char* list_name, int halaman_sekarang, int item_per_halaman, int* nomor_urut_awal_di_halaman) {
+    // Parameter nomor_urut_awal_di_halaman_ptr_dummy_tidak_dipakai bisa diabaikan
     if (tail == NULL) {
-        printf("   (List paper %s kosong atau tail belum di-set)\n", list_name);
+        // printf("   (List paper %s kosong atau tail belum di-set)\n", list_name);
         return 0;
     }
     
-    PaperNode* temp_head = tail; // Cari head untuk menghitung total item
-    if (temp_head != NULL) {
-        while(temp_head->prev != NULL) {
-            temp_head = temp_head->prev;
+    PaperNode* temp_head_untuk_hitung = tail;
+    if (temp_head_untuk_hitung != NULL) { 
+        while(temp_head_untuk_hitung->prev != NULL) {
+            temp_head_untuk_hitung = temp_head_untuk_hitung->prev;
         }
     }
-    int total_item = hitungTotalItemDiList(temp_head);
+    int total_item = hitungTotalItemDiList(temp_head_untuk_hitung);
 
     if (total_item == 0) {
-        printf("   (List paper %s kosong)\n", list_name);
+        // printf("   (List paper %s kosong)\n", list_name);
         return 0;
     }
 
-    // Item dihitung dari depan (0 hingga total_item-1) untuk konsistensi penomoran global
-    int start_index_0based_dari_depan = (halaman_sekarang - 1) * item_per_halaman;
-
-    if (start_index_0based_dari_depan >= total_item) {
+    int start_index_0based_dari_depan_untuk_referensi_halaman = (halaman_sekarang - 1) * item_per_halaman;
+    if (start_index_0based_dari_depan_untuk_referensi_halaman >= total_item) {
         // printf("   (Halaman %d tidak valid. Total item: %d)\n", halaman_sekarang, total_item);
-        if (nomor_urut_awal_di_halaman_ptr != NULL) {
-            *nomor_urut_awal_di_halaman_ptr = (total_item > 0 && start_index_0based_dari_depan == 0) ? 1 : 0;
-        }
         return total_item;
     }
     
-    if (nomor_urut_awal_di_halaman_ptr != NULL) {
-        *nomor_urut_awal_di_halaman_ptr = start_index_0based_dari_depan + 1;
-    }
-
     PaperNode* current = tail;
     int i_skip = 0; 
-    // Dari tail, kita skip sejumlah (halaman_sekarang - 1) * item_per_halaman untuk mencapai
-    // item TERAKHIR dari halaman yang ingin ditampilkan (jika dihitung dari belakang).
-    int items_to_skip_from_tail_to_reach_last_of_page = (halaman_sekarang - 1) * item_per_halaman;
+    // Dari tail, kita skip sejumlah (halaman_sekarang - 1) * item_per_halaman 
+    // untuk mencapai item TERAKHIR dari halaman yang ingin ditampilkan (jika diurutkan maju)
+    // atau item PERTAMA jika diurutkan mundur dari tail untuk halaman tersebut
+    int items_to_skip_from_tail = (halaman_sekarang - 1) * item_per_halaman;
     
     current = tail;
     i_skip = 0;
-    while(current != NULL && i_skip < items_to_skip_from_tail_to_reach_last_of_page) {
+    while(current != NULL && i_skip < items_to_skip_from_tail) {
         current = current->prev;
         i_skip++;
     }
     
     int item_ditampilkan_di_halaman_ini = 0;
-    // Nomor global dihitung mundur dari (total_item - items_to_skip_from_tail_to_reach_last_of_page)
-    int nomor_global_saat_ini = total_item - items_to_skip_from_tail_to_reach_last_of_page;
-
+    int nomor_tampil_lokal = 1; // Nomor dimulai dari 1 untuk setiap halaman
+    
     while (current != NULL && item_ditampilkan_di_halaman_ini < item_per_halaman) {
-        printf("   %d. Judul    : %s\n", nomor_global_saat_ini, current->data.judul);
+        printf("   %d. Judul    : %s\n", nomor_tampil_lokal, current->data.judul);
         printf("      Tahun    : %d\n", current->data.tahun_terbit);
         printf("      Penulis  : %s\n", current->data.nama_penulis);
         printf("      InCitations: %d\n", current->data.jumlah_incitations);
-        // ... (print field lain) ...
         printf("      --------------------------------------------------\n");
         current = current->prev;
         item_ditampilkan_di_halaman_ini++;
-        nomor_global_saat_ini--;
+        nomor_tampil_lokal++;
     }
+    
+    if (item_ditampilkan_di_halaman_ini == 0 && halaman_sekarang > 0 && total_item > 0) {
+         printf("   (Tidak ada item lagi di halaman %d untuk list %s)\n", halaman_sekarang, list_name);
+    }
+
     return total_item;
 }
 
-// Fungsi pilihJurnalDariList dan pilihJurnalDariListReverse sekarang diimplementasikan di sini
-// dan menerima nomor_pilihan_di_halaman
-PaperNode* pilihJurnalDariList(PaperNode* head, int nomor_pilihan_di_halaman, int halaman_sekarang, int item_per_halaman) {
-    if (nomor_pilihan_di_halaman <= 0 || head == NULL || halaman_sekarang <= 0 || item_per_halaman <= 0) {
-        return NULL;
-    }
-    // Hitung nomor urut global absolut dari item yang dipilih
-    int nomor_pilihan_global = ((halaman_sekarang - 1) * item_per_halaman) + nomor_pilihan_di_halaman;
-
+// Fungsi pilihJurnalDariList dan pilihJurnalDariListReverse sekarang menerima nomor_pilihan_DI_HALAMAN
+// dan parameter paginasi untuk menghitung node yang benar.
+PaperNode* pilihJurnalDariList(PaperNode* head, int nomor_pilihan_global) {
+    if (nomor_pilihan_global <= 0 || head == NULL) return NULL;
     PaperNode* current = head;
-    int i_global = 1; // Indeks global 1-based
+    int i_global = 1; 
     while (current != NULL) {
         if (i_global == nomor_pilihan_global) {
             return current;
@@ -276,35 +253,31 @@ PaperNode* pilihJurnalDariList(PaperNode* head, int nomor_pilihan_di_halaman, in
     return NULL; 
 }
 
-PaperNode* pilihJurnalDariListReverse(PaperNode* tail, int nomor_pilihan_di_halaman, int halaman_sekarang, int item_per_halaman) {
-    if (nomor_pilihan_di_halaman <= 0 || tail == NULL || halaman_sekarang <= 0 || item_per_halaman <= 0) {
-        return NULL;
-    }
-    // Hitung nomor urut global absolut dari item yang dipilih (dihitung dari DEPAN/HEAD)
-    int nomor_pilihan_global_dari_depan = ((halaman_sekarang - 1) * item_per_halaman) + nomor_pilihan_di_halaman;
-
-    PaperNode* temp_head = tail; // Cari head untuk menghitung total item
-    if (temp_head != NULL) {
+PaperNode* pilihJurnalDariListReverse(PaperNode* tail, int nomor_pilihan_global_dari_depan) {
+    // nomor_pilihan_global_dari_depan adalah nomor urut jika dihitung dari head.
+    // Kita akan traverse dari tail.
+    if (nomor_pilihan_global_dari_depan <= 0 || tail == NULL) return NULL;
+    
+    PaperNode* temp_head = tail;
+    if (temp_head != NULL) { 
         while(temp_head->prev != NULL) {
             temp_head = temp_head->prev;
         }
     }
     int total_item = hitungTotalItemDiList(temp_head);
-    if (nomor_pilihan_global_dari_depan > total_item || nomor_pilihan_global_dari_depan <= 0) return NULL;
+    if (nomor_pilihan_global_dari_depan > total_item) return NULL;
 
-    // Item ke-X dari depan adalah item ke-(Total - X + 1) dari belakang (jika penomoran dari belakang juga 1-based)
-    // Atau, kita bisa langsung iterasi dari tail dan hitung sampai nomor global yang sesuai dari belakang.
-    // Nomor global yang ditampilkan di layar saat reverse adalah (total_item - i_skip_from_tail), dst.
-    // Jadi, jika pengguna memilih nomor global X, kita cari saja dari tail.
+    // Item ke-X dari depan adalah item ke-(Total - X + 1) dari belakang (jika penomoran dari belakang 1-based)
+    int target_hitungan_dari_belakang = total_item - nomor_pilihan_global_dari_depan + 1;
 
     PaperNode* current = tail;
-    int i_hitung_mundur_global = total_item; // Nomor global item terakhir (tail)
+    int i_dari_belakang = 1;
     while (current != NULL) {
-        if (i_hitung_mundur_global == nomor_pilihan_global_dari_depan) {
+        if (i_dari_belakang == target_hitungan_dari_belakang) {
             return current;
         }
         current = current->prev;
-        i_hitung_mundur_global--;
+        i_dari_belakang++;
     }
     return NULL;
 }
@@ -318,5 +291,7 @@ void hapusListPaper(PaperNode** head_ptr, PaperNode** tail_ptr) {
         current = next_node;
     }
     *head_ptr = NULL;
-    *tail_ptr = NULL; // Juga reset tail
+    if (tail_ptr != NULL) { 
+        *tail_ptr = NULL;
+    }
 }
