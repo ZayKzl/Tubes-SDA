@@ -25,18 +25,14 @@ void tampilkanMenuUtama() {
     printf("=========================================\n");
     printf("      APLIKASI JURNAL ILMIAH SDA\n");
     printf("=========================================\n");
-    printf(" Stakeholder: Civitas Akademika\n"); // Hapus [cite: 1] jika tidak dari file
+    printf(" Stakeholder: Civitas Akademika\n");
     printf("-----------------------------------------\n");
     printf("Menu:\n");
-    printf("1. Pencarian Jurnal (berdasarkan Field of Study)\n"); // Hapus [cite: 1]
+    printf("1. Pencarian Jurnal (berdasarkan Field of Study)\n");
     printf("0. Keluar\n");
     printf("-----------------------------------------\n");
     printf("Pilihan Anda: ");
 }
-
-// Fungsi pilihJurnalDariList dan pilihJurnalDariListReverse
-// seharusnya diimplementasikan di linked_list_paper.c dan dideklarasikan di .h nya
-// Jika masih di sini, pastikan konsisten. Untuk sekarang, kita asumsikan mereka ada di linked_list_paper.c
 
 void lihatAbstrakJurnal(JurnalData data_jurnal) {
     bersihkanLayar();
@@ -68,7 +64,6 @@ void kelolaOpsiUrutan(BSTNodeField* node_bst_field) {
     int halaman_sekarang = 1;
     const int ITEM_PER_HALAMAN = 20;
     int total_item_di_list_aktif = 0;
-    int dummy_nomor_awal; // Untuk parameter fungsi tampilkanList...
 
     PaperNode* head_list_aktif = NULL; 
     PaperNode* tail_list_aktif = NULL; 
@@ -85,37 +80,37 @@ void kelolaOpsiUrutan(BSTNodeField* node_bst_field) {
                 urutan_aktif_str = "Tahun Terbit (Terbaru Dulu)";
                 tail_list_aktif = node_bst_field->year_list_tail;
                 head_list_aktif = NULL; 
-                total_item_di_list_aktif = tampilkanListPaperReverse(tail_list_aktif, "Tahun (Terbaru)", halaman_sekarang, ITEM_PER_HALAMAN, &dummy_nomor_awal);
+                total_item_di_list_aktif = tampilkanListPaperReverse(tail_list_aktif, "Tahun (Terbaru)", halaman_sekarang, ITEM_PER_HALAMAN);
                 break;
             case 2: 
                 urutan_aktif_str = "Tahun Terbit (Terlama Dulu)";
                 head_list_aktif = node_bst_field->year_list_head;
                 tail_list_aktif = NULL;
-                total_item_di_list_aktif = tampilkanListPaper(head_list_aktif, "Tahun (Terlama)", halaman_sekarang, ITEM_PER_HALAMAN, &dummy_nomor_awal);
+                total_item_di_list_aktif = tampilkanListPaper(head_list_aktif, "Tahun (Terlama)", halaman_sekarang, ITEM_PER_HALAMAN);
                 break;
             case 3: 
                 urutan_aktif_str = "Popularitas (InCitations Terbanyak)";
                 head_list_aktif = node_bst_field->incitations_list_head;
                 tail_list_aktif = NULL;
-                total_item_di_list_aktif = tampilkanListPaper(head_list_aktif, "Incitations (Terbanyak)", halaman_sekarang, ITEM_PER_HALAMAN, &dummy_nomor_awal);
+                total_item_di_list_aktif = tampilkanListPaper(head_list_aktif, "Incitations (Terbanyak)", halaman_sekarang, ITEM_PER_HALAMAN);
                 break;
             case 4: 
                 urutan_aktif_str = "Popularitas (InCitations Tersedikit)";
                 tail_list_aktif = node_bst_field->incitations_list_tail;
                 head_list_aktif = NULL;
-                total_item_di_list_aktif = tampilkanListPaperReverse(tail_list_aktif, "Incitations (Tersedikit)", halaman_sekarang, ITEM_PER_HALAMAN, &dummy_nomor_awal);
+                total_item_di_list_aktif = tampilkanListPaperReverse(tail_list_aktif, "Incitations (Tersedikit)", halaman_sekarang, ITEM_PER_HALAMAN);
                 break;
             case 5: 
                 urutan_aktif_str = "Judul (A-Z)";
                 head_list_aktif = node_bst_field->title_list_head;
                 tail_list_aktif = NULL;
-                total_item_di_list_aktif = tampilkanListPaper(head_list_aktif, "Judul (A-Z)", halaman_sekarang, ITEM_PER_HALAMAN, &dummy_nomor_awal);
+                total_item_di_list_aktif = tampilkanListPaper(head_list_aktif, "Judul (A-Z)", halaman_sekarang, ITEM_PER_HALAMAN);
                 break;
             case 6: 
                 urutan_aktif_str = "Judul (Z-A)";
                 tail_list_aktif = node_bst_field->title_list_tail;
                 head_list_aktif = NULL;
-                total_item_di_list_aktif = tampilkanListPaperReverse(tail_list_aktif, "Judul (Z-A)", halaman_sekarang, ITEM_PER_HALAMAN, &dummy_nomor_awal);
+                total_item_di_list_aktif = tampilkanListPaperReverse(tail_list_aktif, "Judul (Z-A)", halaman_sekarang, ITEM_PER_HALAMAN);
                 break;
         }
         

@@ -17,7 +17,6 @@ PaperNode* buatPaperNode(JurnalData data_jurnal) {
 }
 
 // Menyisipkan paper ke DLL yang diurutkan berdasarkan TAHUN (MENAIK: terlama dulu)
-// Ini adalah fungsi Anda 'sisipkanPaperUrutTahunDLL' yang sudah bekerja, mungkin hanya ganti nama.
 void sisipkanDLLUrutTahunAsc(PaperNode** head_ptr, PaperNode** tail_ptr, JurnalData data_jurnal) {
     PaperNode* node_baru = buatPaperNode(data_jurnal);
     if (node_baru == NULL) return;
@@ -127,16 +126,15 @@ int hitungTotalItemDiList(PaperNode* head) {
 }
 
 // Tampilan MAJU dengan paginasi (NOMOR LOKAL 1-N PER HALAMAN)
-int tampilkanListPaper(PaperNode* head, const char* list_name, int halaman_sekarang, int item_per_halaman, int* nomor_urut_awal_di_halaman) {
-    // Parameter nomor_urut_awal_di_halaman_ptr_dummy_tidak_dipakai bisa diabaikan atau dihapus jika header juga diubah
+int tampilkanListPaper(PaperNode* head, const char* list_name, int halaman_sekarang, int item_per_halaman) {
     if (head == NULL) {
-        // printf("   (List paper %s kosong)\n", list_name); // Pesan ini bisa dihandle di fitur_aplikasi
+        printf("   (List paper %s kosong)\n", list_name);
         return 0;
     }
 
     int total_item = hitungTotalItemDiList(head);
     if (total_item == 0) {
-        // printf("   (List paper %s kosong)\n", list_name);
+        printf("   (List paper %s kosong)\n", list_name);
         return 0;
     }
 
@@ -176,10 +174,9 @@ int tampilkanListPaper(PaperNode* head, const char* list_name, int halaman_sekar
 }
 
 // Tampilan MUNDUR dengan paginasi (NOMOR LOKAL 1-N PER HALAMAN)
-int tampilkanListPaperReverse(PaperNode* tail, const char* list_name, int halaman_sekarang, int item_per_halaman, int* nomor_urut_awal_di_halaman) {
-    // Parameter nomor_urut_awal_di_halaman_ptr_dummy_tidak_dipakai bisa diabaikan
+int tampilkanListPaperReverse(PaperNode* tail, const char* list_name, int halaman_sekarang, int item_per_halaman) {
     if (tail == NULL) {
-        // printf("   (List paper %s kosong atau tail belum di-set)\n", list_name);
+        printf("   (List paper %s kosong atau tail belum di-set)\n", list_name);
         return 0;
     }
     
@@ -192,13 +189,13 @@ int tampilkanListPaperReverse(PaperNode* tail, const char* list_name, int halama
     int total_item = hitungTotalItemDiList(temp_head_untuk_hitung);
 
     if (total_item == 0) {
-        // printf("   (List paper %s kosong)\n", list_name);
+        printf("   (List paper %s kosong)\n", list_name);
         return 0;
     }
 
     int start_index_0based_dari_depan_untuk_referensi_halaman = (halaman_sekarang - 1) * item_per_halaman;
     if (start_index_0based_dari_depan_untuk_referensi_halaman >= total_item) {
-        // printf("   (Halaman %d tidak valid. Total item: %d)\n", halaman_sekarang, total_item);
+        printf("   (Halaman %d tidak valid. Total item: %d)\n", halaman_sekarang, total_item);
         return total_item;
     }
     
