@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <strings.h> // Untuk strcasecmp
+#include <strings.h>
 #include "../include/bst_field_study.h"
 #include "../include/linked_list_paper.h"
 
@@ -57,18 +57,38 @@ BSTNodeField* cariBSTNodeField(BSTNodeField* root, const char* field_of_study) {
     }
 }
 
+// Fungsi membangun BST yang seimbang secara rekursif dari array string yang sudah diurutkan.
+BSTNodeField* bangunBSTSeimbang(char** fields_array, int start_index, int end_index) {
+    if (start_index > end_index) {
+        return NULL;
+    }
+
+    int mid_index = start_index + (end_index - start_index) / 2;
+    BSTNodeField* root = buatBSTNodeField(fields_array[mid_index]);
+    if (root == NULL) {
+        // Handle error: Gagal alokasi memori saat membuat node
+        return NULL;
+    }
+
+    root->left_child = bangunBSTSeimbang(fields_array, start_index, mid_index - 1);
+    root->right_child = bangunBSTSeimbang(fields_array, mid_index + 1, end_index);
+
+    return root;
+}
+
+
 void tambahkanJurnalKeBST(BSTNodeField** root_bst_ptr, JurnalData data_jurnal) {
-    if (root_bst_ptr == NULL) return;
+    if (root_bst_ptr == NULL || *root_bst_ptr == NULL) {
+        fprintf(stderr, "Error: Root BST belum diinisialisasi atau NULL saat mencoba menambahkan jurnal. Jurnal '%s' dilewati.\n", data_jurnal.judul);
+        return;
+    }
 
     BSTNodeField* target_node_bst = cariBSTNodeField(*root_bst_ptr, data_jurnal.field_of_study);
 
     if (target_node_bst == NULL) {
-        *root_bst_ptr = sisipkanBSTNodeField(*root_bst_ptr, data_jurnal.field_of_study);
-        target_node_bst = cariBSTNodeField(*root_bst_ptr, data_jurnal.field_of_study);
-        if (target_node_bst == NULL) {
-            fprintf(stderr, "Error: Gagal membuat atau menemukan node BST untuk %s setelah disisipkan\n", data_jurnal.field_of_study);
-            return;
-        }
+        fprintf(stderr, "Peringatan: Field of Study '%s' untuk jurnal '%s' tidak ditemukan di BST statis. Jurnal tidak akan diindeks.\n", 
+                data_jurnal.field_of_study, data_jurnal.judul);
+        return;
     }
 
     // Sisipkan ke tiga DLL yang berbeda
