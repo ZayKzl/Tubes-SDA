@@ -4,6 +4,7 @@
 #include "../include/fitur_aplikasi.h"
 #include "../include/bst_field_study.h"   
 #include "../include/linked_list_paper.h" 
+#include "../include/stack_search_history.h"
 
 void bersihkanLayar() {
     // Gunakan system("cls") untuk Windows, system("clear") untuk Linux/macOS
@@ -30,6 +31,7 @@ void tampilkanMenuUtama() {
     printf("Menu:\n");
     printf("1. Tampilkan Field of Study\n");
     printf("2. Pencarian Jurnal (berdasarkan Field of Study)\n");
+    printf("3. Lihat Riwayat Pencarian\n");
     printf("0. Keluar\n");
     printf("-----------------------------------------\n");
     printf("Pilihan Anda: ");
@@ -38,6 +40,7 @@ void tampilkanMenuUtama() {
 void tampilkanSemuaFieldOfStudy(BSTNodeField* root) {
     if (root == NULL) {
         printf("Tidak ada data Field of Study.\n");
+        tungguEnter();
         return;
     }
 
@@ -45,6 +48,7 @@ void tampilkanSemuaFieldOfStudy(BSTNodeField* root) {
     printf("       DAFTAR FIELD OF STUDY\n");
     printf("=========================================\n");
     tampilkanBSTInOrder(root);
+    tungguEnter();
 }
 
 
@@ -244,7 +248,7 @@ void kelolaOpsiUrutan(BSTNodeField* node_bst_field) {
     } while (pilihan_menu_aksi != 0); 
 }
 
-void jalankanFiturPencarianJurnal(BSTNodeField* root_bst) {
+void jalankanFiturPencarianJurnal(BSTNodeField* root_bst, SearchHistoryStack *history) {
     char input_fos[MAX_FIELD_STUDY];
     bersihkanLayar();
     printf("=========================================\n");
@@ -262,6 +266,9 @@ void jalankanFiturPencarianJurnal(BSTNodeField* root_bst) {
         tungguEnter();
         return;
     }
+
+    // Push query ke riwayat pencarian
+    pushSearchHistory(history, input_fos);
 
     BSTNodeField* node_ditemukan = cariBSTNodeField(root_bst, input_fos);
 

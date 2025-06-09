@@ -2,6 +2,7 @@
 #define FITUR_APLIKASI_H
 
 #include "structs.h" // Untuk BSTNodeField
+#include "stack_search_history.h" // Untuk SearchHistoryStack
 
 // --- Fungsi untuk Menampilkan Menu Utama ---
 void tampilkanMenuUtama();
@@ -13,7 +14,8 @@ void tampilkanSemuaFieldOfStudy(BSTNodeField* root);
 // root_bst adalah root dari keseluruhan struktur data.
 // Meminta input field_of_study dari pengguna.
 // Menampilkan hasil pencarian (awal urut tahun) dan opsi untuk melihat abstrak/mengurutkan.
-void jalankanFiturPencarianJurnal(BSTNodeField* root_bst);
+// Menambahkan parameter SearchHistoryStack *history
+void jalankanFiturPencarianJurnal(BSTNodeField* root_bst, SearchHistoryStack *history);
 
 // --- Fungsi untuk Menjalankan Fitur Melihat Abstrak ---
 // Ini mungkin lebih baik dipanggil dari dalam jalankanFiturPencarianJurnal

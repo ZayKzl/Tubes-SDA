@@ -17,6 +17,7 @@
                 "src/bst_field_study.c",
                 "src/manajemen_file.c",
                 "src/fitur_aplikasi.c",
+                "src/stack_search_history.c",
                 "cJSON/cJSON.c", // Jangan lupa cJSON.c
                 
                 // Output file
