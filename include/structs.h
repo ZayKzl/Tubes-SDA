@@ -45,4 +45,12 @@ typedef struct BSTNodeField {
     int height; // Tinggi subtree yang berakar pada node ini
 } BSTNodeField;
 
+typedef struct AuthorPaperNode {
+    char author_name[MAX_PENULIS];
+    PaperNode** papers;
+    int paper_count;
+    int paper_capacity;
+    struct AuthorPaperNode* next;
+} AuthorPaperNode;
+
 #endif // STRUCTS_H

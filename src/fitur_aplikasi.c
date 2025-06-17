@@ -1,10 +1,12 @@
- #include <stdio.h>
+#include <stdio.h>
 #include <string.h>
 #include <stdlib.h> 
+#include <ctype.h>
 #include "../include/fitur_aplikasi.h"
 #include "../include/bst_field_study.h"   
 #include "../include/linked_list_paper.h" 
 #include "../include/stack_search_history.h"
+#include "../include/structs.h"
 
 void bersihkanLayar() {
     // Gunakan system("cls") untuk Windows, system("clear") untuk Linux/macOS
@@ -68,17 +70,6 @@ void lihatAbstrakJurnal(JurnalData data_jurnal) {
     printf("=========================================\n");
 }
 
-
-#include <ctype.h> // for tolower
-
-typedef struct AuthorPaperNode {
-    char author_name[MAX_PENULIS];
-    PaperNode** papers;
-    int paper_count;
-    int paper_capacity;
-    struct AuthorPaperNode* next;
-} AuthorPaperNode;
-
 void tambahPaperKeAuthor(AuthorPaperNode* author_node, PaperNode* paper) {
     if (author_node->paper_count == author_node->paper_capacity) {
         int new_capacity = (author_node->paper_capacity == 0) ? 4 : author_node->paper_capacity * 2;
@@ -126,9 +117,6 @@ void hapusDaftarAuthor(AuthorPaperNode* head) {
     }
 }
 
-#include <ctype.h>
-#include <string.h>
-#include <stdlib.h>
 
 int stringStartsWithIgnoreCase(const char* str, const char* prefix) {
     while (*prefix) {
@@ -212,20 +200,6 @@ int tampilkanAuthorDanPapers(AuthorPaperNode* author_list_head, int halaman_seka
     return total_papers;
 }
 
-PaperNode* cariPaperDariNomor(AuthorPaperNode* author_list_head, int nomor) {
-    int current_index = 1;
-    AuthorPaperNode* current_author = author_list_head;
-    while (current_author != NULL) {
-        for (int i = 0; i < current_author->paper_count; i++) {
-            if (current_index == nomor) {
-                return current_author->papers[i];
-            }
-            current_index++;
-        }
-        current_author = current_author->next;
-    }
-    return NULL;
-}
 
 void kelolaOpsiUrutanAuthor(BSTNodeField* root_bst_field) {
     if (root_bst_field == NULL) {
@@ -291,7 +265,7 @@ void kelolaOpsiUrutanAuthor(BSTNodeField* root_bst_field) {
             printf("      --------------------------------------------------\n\n");
 
             printf("Pilihan Aksi:\n");
-            printf("7. Lihat Abstrak Jurnal\n");
+            // Removed option 7 for viewing abstract
             if (halaman_sekarang < total_halaman) {
                 printf("8. Halaman Berikutnya (Next)\n");
             }
@@ -308,44 +282,7 @@ void kelolaOpsiUrutanAuthor(BSTNodeField* root_bst_field) {
             }
 
             switch (pilihan_menu_aksi) {
-                case 7: {
-                    if (total_papers == 0) {
-                        printf("Tidak ada jurnal untuk dilihat.\n");
-                        tungguEnter();
-                        break;
-                    }
-                    printf("Masukkan nomor jurnal (1-%d) yang tampil di halaman ini: ", 
-                        (total_papers - ((halaman_sekarang - 1) * ITEM_PER_HALAMAN) < ITEM_PER_HALAMAN) ? 
-                        (total_papers % ITEM_PER_HALAMAN == 0 ? ITEM_PER_HALAMAN : total_papers % ITEM_PER_HALAMAN) : 
-                        ITEM_PER_HALAMAN);
-
-                    int no_jurnal_di_halaman_input;
-                    int c_buf;
-                    while ((c_buf = getchar()) != '\n' && c_buf != EOF);
-
-                    if (scanf("%d", &no_jurnal_di_halaman_input) == 1) {
-                        int max_item_di_halaman_ini = total_papers - ((halaman_sekarang - 1) * ITEM_PER_HALAMAN);
-                        if (max_item_di_halaman_ini > ITEM_PER_HALAMAN) max_item_di_halaman_ini = ITEM_PER_HALAMAN;
-
-                        if (no_jurnal_di_halaman_input < 1 || no_jurnal_di_halaman_input > max_item_di_halaman_ini) {
-                            printf("Nomor pilihan di halaman tidak valid.\n");
-                        } else {
-                            int nomor_pilihan_global = ((halaman_sekarang - 1) * ITEM_PER_HALAMAN) + no_jurnal_di_halaman_input;
-                            PaperNode* jurnal_pilihan = cariPaperDariNomor(author_list_head, nomor_pilihan_global);
-                            if (jurnal_pilihan != NULL) {
-                                lihatAbstrakJurnal(jurnal_pilihan->data);
-                            } else {
-                                printf("Nomor jurnal (global %d) tidak ditemukan.\n", nomor_pilihan_global);
-                            }
-                        }
-                    } else {
-                        printf("Input nomor jurnal tidak valid.\n");
-                        int c_err;
-                        while ((c_err = getchar()) != '\n' && c_err != EOF);
-                    }
-                    tungguEnter();
-                    break;
-                }
+                // Removed case 7 for viewing abstract
                 case 8:
                     if (halaman_sekarang < total_halaman) {
                         halaman_sekarang++;

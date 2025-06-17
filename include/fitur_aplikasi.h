@@ -16,6 +16,18 @@ void jalankanFiturPencarianJurnal(BSTNodeField* root_bst, SearchHistoryStack *hi
 // --- Fungsi untuk Menjalankan Fitur Melihat Abstrak ---
 void lihatAbstrakJurnal(JurnalData data_jurnal);
 
+void tambahPaperKeAuthor(AuthorPaperNode* author_node, PaperNode* paper);
+
+AuthorPaperNode* cariAtauTambahAuthor(AuthorPaperNode** head, const char* author_name);
+
+void hapusDaftarAuthor(AuthorPaperNode* head);
+
+int stringStartsWithIgnoreCase(const char* str, const char* prefix);
+
+void traverseBSTAndCollectAuthors(BSTNodeField* root, const char* search_str, AuthorPaperNode** author_list_head);
+
+int tampilkanAuthorDanPapers(AuthorPaperNode* author_list_head, int halaman_sekarang, int item_per_hal);
+
 // --- Fungsi untuk Mengelola Pilihan Urutan Tampilan ---
 void kelolaOpsiUrutan(BSTNodeField* node_bst_field);
 
