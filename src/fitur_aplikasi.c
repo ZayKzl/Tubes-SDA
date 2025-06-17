@@ -507,32 +507,50 @@ void kelolaOpsiUrutan(BSTNodeField* node_bst_field) {
 
 void jalankanFiturPencarianJurnal(BSTNodeField* root_bst, SearchHistoryStack *history) {
     char input_fos[MAX_FIELD_STUDY];
-    bersihkanLayar();
-    printf("=========================================\n");
-    printf("           PENCARIAN JURNAL\n");
-    printf("=========================================\n");
-    printf("Masukkan Field of Study yang dicari: ");
-    
-    int c;
-    while ((c = getchar()) != '\n' && c != EOF); 
-    
-    if (fgets(input_fos, MAX_FIELD_STUDY, stdin) != NULL) {
+    while (1) {
+        // Bersihkan buffer input di awal loop
+        int c;
+        while ((c = getchar()) != '\n' && c != EOF);
+
+        bersihkanLayar();
+        printf("=========================================\n");
+        printf("           PENCARIAN JURNAL\n");
+        printf("=========================================\n");
+        printf("Masukkan Field of Study yang dicari: ");
+
+        if (fgets(input_fos, MAX_FIELD_STUDY, stdin) == NULL) {
+            printf("Gagal membaca input.\n");
+            tungguEnter();
+            continue;
+        }
+
+        // Jika input tidak mengandung newline, hapus sisa input di buffer
+        if (strchr(input_fos, '\n') == NULL) {
+            while ((c = getchar()) != '\n' && c != EOF);
+        }
+
         input_fos[strcspn(input_fos, "\n")] = 0;
-    } else {
-        printf("Gagal membaca input.\n");
-        tungguEnter();
-        return;
-    }
 
-    // Push query ke riwayat pencarian
-    pushSearchHistory(history, input_fos);
+        if (strlen(input_fos) == 0) {
+            printf("Input kosong. Silakan ulangi input Field of Study.\n");
+            tungguEnter();
+            continue;
+        }
 
-    BSTNodeField* node_ditemukan = cariBSTNodeField(root_bst, input_fos);
+        // Push query ke riwayat pencarian
+        pushSearchHistory(history, input_fos);
 
-    if (node_ditemukan == NULL) {
-        printf("Field of Study '%s' tidak ditemukan.\n", input_fos);
-        tungguEnter();
-    } else {
-        kelolaOpsiUrutan(node_ditemukan);
+        BSTNodeField* node_ditemukan = cariBSTNodeField(root_bst, input_fos);
+
+        // printf("DEBUG: node_ditemukan pointer = %p\n", (void*)node_ditemukan);
+
+        if (node_ditemukan == NULL) {
+            printf("Field of Study '%s' tidak ditemukan.\n", input_fos);
+            tungguEnter();
+            continue;
+        } else {
+            kelolaOpsiUrutan(node_ditemukan);
+            break;
+        }
     }
 }
